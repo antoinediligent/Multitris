@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public enum Tetromino
 {
@@ -16,50 +17,155 @@ public enum Tetromino
 public class Piece
 {
 
-    public Tetromino type;
-    private int rotationPosition;
-    private GameObject[] bricks = new GameObject[4];
+    private Tetromino type;
+    private int rotatePosition;
+    private int x, y;
+    private Tile tile;
 
-    public Piece(Tetromino type, GameObject brickOne, GameObject brickTwo, GameObject brickThree, GameObject brickFour)
+    public Piece(Tetromino type, int x, int y, Sprite sprite)
     {
-        bricks[0] = brickOne;
-        bricks[1] = brickTwo;
-        bricks[2] = brickThree;
-        bricks[3] = brickFour;
-        switch (type)
-        {
+        this.type = type;
+        this.rotatePosition = 1;
+        this.x = x;
+        this.y = y;
+        tile = new Tile();
+        tile.sprite = sprite;
+    }
+
+    public void SetTiles(Tilemap tilemap, Tile tileToSet)
+    {
+        switch (type) {
             case Tetromino.I:
-                brickOne.transform.SetPositionAndRotation(new Vector3(1.5f, 19.5f), brickOne.transform.rotation);
-                brickTwo.transform.SetPositionAndRotation(new Vector3(1.5f, 18.5f), brickOne.transform.rotation);
-                brickThree.transform.SetPositionAndRotation(new Vector3(1.5f, 17.5f), brickOne.transform.rotation);
-                brickFour.transform.SetPositionAndRotation(new Vector3(1.5f, 16.5f), brickOne.transform.rotation);
-                rotationPosition = 1;
+                if (rotatePosition == 1)
+                {
+                    tilemap.SetTile(new Vector3Int(x, y), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x, y - 1), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x, y - 2), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x, y - 3), tileToSet);
+                }
+                else
+                {
+                    tilemap.SetTile(new Vector3Int(x, y), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x + 1, y), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x + 2, y), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x + 3, y), tileToSet);
+                }
                 break;
         }
     }
 
-    public void Down()
+    public void SetTiles(Tilemap tilemap)
     {
-        for (int i = bricks.Length-1; i >= 0; i--)
-        {
-            bricks[i].transform.Translate(Vector3.down);
-        }
+        SetTiles(tilemap, tile);
     }
 
-    public bool isAtBottom()
+    public bool Down(Tilemap tilemap)
     {
-        for (int i = 0; i < bricks.Length; i++)
+        switch (type)
         {
-            if (bricks[i].transform.position.y <= 0.5f)
-            {
-                return true;
-            }
+            case Tetromino.I:
+                if (rotatePosition == 1)
+                {
+                    TileBase t = tilemap.GetTile(new Vector3Int(x, y - 4));
+
+                    if (t != null)
+                    {
+                        // Collision
+                        return false;
+                    }
+
+                    SetTiles(tilemap, null);
+                    y--;
+                    SetTiles(tilemap, tile);
+                }
+                else if (rotatePosition == 2)
+                {
+                    SetTiles(tilemap, null);
+                    y--;
+                    SetTiles(tilemap, tile);
+                }
+                break;
         }
+
+        return IsAtBottom();
+    }
+
+    public bool IsAtBottom()
+    {
+        switch (type)
+        {
+            case Tetromino.I:
+                if (rotatePosition == 1)
+                {
+                    return (y == 3);
+                }
+                else if (rotatePosition == 2)
+                {
+                    return (y == 0);
+                }
+                break;
+        }
+
         return false;
     }
 
-    public void insert(int[][] boardState)
+    public bool MoveLeft(Tilemap tilemap)
     {
+        switch (type)
+        {
+            case Tetromino.I:
+                if (rotatePosition == 1)
+                {
+                    if (x == 0)
+                    {
+                        return false;
+                    }
 
+                    for (int i = y; i <= y+3; i++)
+                    {
+                        TileBase t = tilemap.GetTile(new Vector3Int(x, i));
+                        if (t != null)
+                        {
+                            return false;
+                        }
+                    }
+
+                    SetTiles(tilemap, null);
+                    x -= 1;
+                    SetTiles(tilemap, tile);
+                }
+                else if (rotatePosition == 2)
+                {
+                    if (x == 0)
+                    {
+                        return false;
+                    }
+                }
+                break;
+        }
+        return true;
+    }
+
+    public void Rotate(Tilemap tilemap)
+    {
+        switch (type)
+        {
+            case Tetromino.I:
+                if (rotatePosition == 1)
+                {
+                    SetTiles(tilemap, null);
+                    x -= 1;
+                    rotatePosition = 2;
+                    SetTiles(tilemap, tile);
+                }
+                else if (rotatePosition == 2)
+                {
+                    SetTiles(tilemap, null);
+                    x += 1;
+                    rotatePosition = 1;
+                    SetTiles(tilemap, tile);
+                }
+                break;
+        }
     }
 }
