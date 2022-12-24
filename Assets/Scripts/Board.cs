@@ -27,7 +27,7 @@ public class Board : MonoBehaviour
     {
         tilemap = GetComponentInChildren<Tilemap>();
 
-        activePiece = new Piece(Tetromino.T, spawnSpot.x, spawnSpot.y, playerOneSprite);
+        activePiece = new Piece(Tetromino.S, spawnSpot.x, spawnSpot.y, playerOneSprite);
         activePiece.SetTiles(tilemap);
     }
 
@@ -78,7 +78,7 @@ public class Board : MonoBehaviour
 
             if (!ok || activePiece.IsAtBottom())
             {
-                activePiece = new Piece(Tetromino.T, spawnSpot.x, spawnSpot.y, playerOneSprite);
+                activePiece = new Piece(Tetromino.S, spawnSpot.x, spawnSpot.y, playerOneSprite);
                 activePiece.SetTiles(tilemap);
             }
         }
