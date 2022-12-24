@@ -15,37 +15,25 @@ public class Board : MonoBehaviour
     private Vector3Int spawnSpot = new Vector3Int(4, 19);
 
     private float lastUpdate;
-    private bool canGoDown = true;
     private Piece activePiece;
 
     private float lastInput;
     const float inputDealy = 0.1f;
 
+    int debugCounter = 0;
+    bool ok = true;
+
     void Start()
     {
         tilemap = GetComponentInChildren<Tilemap>();
 
-        activePiece = new Piece(Tetromino.I, spawnSpot.x, spawnSpot.y, playerOneSprite);
+        activePiece = new Piece(Tetromino.T, spawnSpot.x, spawnSpot.y, playerOneSprite);
         activePiece.SetTiles(tilemap);
     }
 
     void Update()
     {
-        /**
-         * Don't instantiate a new piece here to let the player the opportunity to make a move
-         */
-        if (lastUpdate + 0.2f < Time.time)
-        {
-            canGoDown = activePiece.Down(tilemap);
-            lastUpdate = Time.time;
-
-            if (canGoDown)
-            {
-                canGoDown = !activePiece.IsAtBottom();
-            }
-        }
-        
-        if (Time.time > lastInput + 0.1f)
+        if (Time.time > lastInput + 0.2f)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
@@ -64,11 +52,36 @@ public class Board : MonoBehaviour
             activePiece.Rotate(tilemap);
         }
 
-        if (!canGoDown)
+        if (lastUpdate + 0.2f < Time.time)
         {
-            activePiece = new Piece(Tetromino.T, spawnSpot.x, spawnSpot.y, playerOneSprite);
-            activePiece.SetTiles(tilemap);
+            // Only for debug
+            if (debugCounter <= 400)
+            {
+                debugCounter++;
+                ok = activePiece.Down(tilemap);
+                lastUpdate = Time.time;
+            }
+
+            // Give the player an opportunity to move his piece just before it's sealed
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                activePiece.MoveLeft(tilemap);
+                lastInput = Time.time;
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                activePiece.MoveRight(tilemap);
+                lastInput = Time.time;
+            }
+
+            // Check again if the piece can go down, maybe user move it where it can go down
+
+            if (!ok || activePiece.IsAtBottom())
+            {
+                activePiece = new Piece(Tetromino.T, spawnSpot.x, spawnSpot.y, playerOneSprite);
+                activePiece.SetTiles(tilemap);
+            }
         }
     }
-    
+
 }

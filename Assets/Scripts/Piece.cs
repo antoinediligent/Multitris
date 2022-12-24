@@ -282,6 +282,22 @@ public class Piece
                         return false;
                     }
                 }
+                else if (rotatePosition == 3)
+                {
+                    TileBase t = tilemap.GetTile(new Vector3Int(x - 1, y));
+                    if (t != null)
+                    {
+                        return false;
+                    }
+                }
+                else if (rotatePosition == 4)
+                {
+                    TileBase t = tilemap.GetTile(new Vector3Int(x - 1, y));
+                    if (t != null)
+                    {
+                        return false;
+                    }
+                }
 
                 SetTiles(tilemap, null);
                 x -= 1;
@@ -318,11 +334,58 @@ public class Piece
                     {
                         return false;
                     }
-
-                    SetTiles(tilemap, null);
-                    x -= 1;
-                    SetTiles(tilemap, tile);
                 }
+                else if (rotatePosition == 2)
+                {
+                    if (x == 0)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x - 1, y));
+                    TileBase t2 = tilemap.GetTile(new Vector3Int(x - 1, y - 1));
+                    TileBase t3 = tilemap.GetTile(new Vector3Int(x - 1, y - 2));
+
+                    if (t1 != null || t2 != null || t3 != null)
+                    {
+                        return false;
+                    }
+                }
+                else if (rotatePosition == 3)
+                {
+                    if (x == 0)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x - 1, y));
+                    TileBase t2 = tilemap.GetTile(new Vector3Int(x, y - 1));
+
+                    if (t1 != null || t2 != null)
+                    {
+                        return false;
+                    }
+                }
+                else if (rotatePosition == 4)
+                {
+                    if (x == 1)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x - 1, y));
+                    TileBase t2 = tilemap.GetTile(new Vector3Int(x - 2, y - 1));
+                    TileBase t3 = tilemap.GetTile(new Vector3Int(x - 1, y - 2));
+
+                    if (t1 != null || t2 != null || t3 != null)
+                    {
+                        return false;
+                    }
+                }
+
+                SetTiles(tilemap, null);
+                x -= 1;
+                SetTiles(tilemap, tile);
 
                 break;
         }
@@ -399,11 +462,58 @@ public class Piece
                     {
                         return false;
                     }
-
-                    SetTiles(tilemap, null);
-                    x += 1;
-                    SetTiles(tilemap, tile);
                 }
+                else if (rotatePosition == 2)
+                {
+                    if (x == Board.BOARD_WIDTH - 2)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x + 1, y));
+                    TileBase t2 = tilemap.GetTile(new Vector3Int(x + 2, y - 1));
+                    TileBase t3 = tilemap.GetTile(new Vector3Int(x + 1, y - 2));
+
+                    if (t1 != null || t2 != null || t3 != null)
+                    {
+                        return false;
+                    }
+                }
+                else if (rotatePosition == 3)
+                {
+                    if (x == Board.BOARD_WIDTH - 3)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x + 3, y));
+                    TileBase t2 = tilemap.GetTile(new Vector3Int(x + 2, y - 1));
+
+                    if (t1 != null || t2 != null)
+                    {
+                        return false;
+                    }
+                }
+                else if (rotatePosition == 4)
+                {
+                    if (x == Board.BOARD_WIDTH - 1)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x + 1, y));
+                    TileBase t2 = tilemap.GetTile(new Vector3Int(x + 1, y - 1));
+                    TileBase t3 = tilemap.GetTile(new Vector3Int(x + 1, y - 2));
+
+                    if (t1 != null || t2 != null || t3 != null)
+                    {
+                        return false;
+                    }
+                }
+
+                SetTiles(tilemap, null);
+                x += 1;
+                SetTiles(tilemap, tile);
 
                 break;
         }
@@ -516,18 +626,78 @@ public class Piece
             case Tetromino.T:
                 if (rotatePosition == 1)
                 {
-
-
+                    if (y == 2)
+                    {
+                        return false;
+                    }
 
                     TileBase t1 = tilemap.GetTile(new Vector3Int(x, y + 2));
 
-                    if (t1 != null) 
+                    if (t1 != null)
                     {
                         return false;
                     }
 
                     SetTiles(tilemap, null);
                     rotatePosition = 2;
+                    SetTiles(tilemap, tile);
+                }
+                else if (rotatePosition == 2)
+                {
+                    if (x == 0)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x - 1, y - 1));
+
+                    if (t1 != null)
+                    {
+                        return false;
+                    }
+
+                    SetTiles(tilemap, null);
+                    x -= 1;
+                    y -= 1;
+                    rotatePosition = 3;
+                    SetTiles(tilemap, tile);
+                }
+                else if (rotatePosition == 3)
+                {
+                    if (y == 1)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x + 1, y + 1));
+
+                    if (t1 != null)
+                    {
+                        return false;
+                    }
+
+                    SetTiles(tilemap, null);
+                    x += 1;
+                    y += 1;
+                    rotatePosition = 4;
+                    SetTiles(tilemap, tile);
+                }
+                else if (rotatePosition == 4)
+                {
+                    if (x == Board.BOARD_WIDTH - 1)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x + 1, y - 1));
+
+                    if (t1 != null)
+                    {
+                        return false;
+                    }
+
+                    SetTiles(tilemap, null);
+                    rotatePosition = 1;
                     SetTiles(tilemap, tile);
                 }
                 break;
