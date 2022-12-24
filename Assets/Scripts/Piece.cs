@@ -16,7 +16,6 @@ public enum Tetromino
 
 /**
  * I piece rotatePosition :
- * 
  * 1) x
  *    x
  *    x
@@ -24,8 +23,8 @@ public enum Tetromino
  *   
  * 2) xxxx
  * 
- * T piece rotatePosition :
  * 
+ * T piece rotatePosition :
  * 1)  x
  *    xxx
  *    
@@ -59,7 +58,8 @@ public class Piece
 
     public void SetTiles(Tilemap tilemap, Tile tileToSet)
     {
-        switch (type) {
+        switch (type)
+        {
             case Tetromino.I:
                 if (rotatePosition == 1)
                 {
@@ -83,6 +83,35 @@ public class Piece
                 tilemap.SetTile(new Vector3Int(x, y - 1), tileToSet);
                 tilemap.SetTile(new Vector3Int(x + 1, y - 1), tileToSet);
                 break;
+
+            case Tetromino.T:
+
+                tilemap.SetTile(new Vector3Int(x, y), tileToSet);
+                if (rotatePosition == 1)
+                {
+                    tilemap.SetTile(new Vector3Int(x - 1, y - 1), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x, y - 1), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x + 1, y - 1), tileToSet);
+                }
+                else if (rotatePosition == 2)
+                {
+                    tilemap.SetTile(new Vector3Int(x, y - 1), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x, y - 2), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x + 1, y - 1), tileToSet);
+                }
+                else if (rotatePosition == 3)
+                {
+                    tilemap.SetTile(new Vector3Int(x + 1, y), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x + 2, y), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x + 1, y - 1), tileToSet);
+                }
+                else if (rotatePosition == 4)
+                {
+                    tilemap.SetTile(new Vector3Int(x, y - 1), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x - 1, y - 1), tileToSet);
+                    tilemap.SetTile(new Vector3Int(x, y - 2), tileToSet);
+                }
+                break;
         }
     }
 
@@ -102,13 +131,8 @@ public class Piece
 
                     if (it != null)
                     {
-                        // Collision
                         return false;
                     }
-
-                    SetTiles(tilemap, null);
-                    y--;
-                    SetTiles(tilemap, tile);
                 }
                 else if (rotatePosition == 2)
                 {
@@ -119,14 +143,13 @@ public class Piece
 
                     if (it1 != null || it2 != null || it3 != null || it4 != null)
                     {
-                        // Collision
                         return false;
                     }
-
-                    SetTiles(tilemap, null);
-                    y--;
-                    SetTiles(tilemap, tile);
                 }
+
+                SetTiles(tilemap, null);
+                y--;
+                SetTiles(tilemap, tile);
                 break;
 
             case Tetromino.O:
@@ -136,8 +159,56 @@ public class Piece
 
                 if (ot1 != null || ot2 != null)
                 {
-                    // Collision
                     return false;
+                }
+
+                SetTiles(tilemap, null);
+                y--;
+                SetTiles(tilemap, tile);
+                break;
+
+            case Tetromino.T:
+                if (rotatePosition == 1)
+                {
+                    TileBase tt1 = tilemap.GetTile(new Vector3Int(x - 1, y - 2));
+                    TileBase tt2 = tilemap.GetTile(new Vector3Int(x, y - 2));
+                    TileBase tt3 = tilemap.GetTile(new Vector3Int(x + 1, y - 2));
+
+                    if (tt1 != null || tt2 != null || tt3 != null)
+                    {
+                        return false;
+                    }
+                }
+                else if (rotatePosition == 2)
+                {
+                    TileBase tt1 = tilemap.GetTile(new Vector3Int(x, y - 3));
+                    TileBase tt2 = tilemap.GetTile(new Vector3Int(x + 1, y - 2));
+
+                    if (tt1 != null || tt2 != null)
+                    {
+                        return false;
+                    }
+                }
+                else if (rotatePosition == 3)
+                {
+                    TileBase tt1 = tilemap.GetTile(new Vector3Int(x, y - 1));
+                    TileBase tt2 = tilemap.GetTile(new Vector3Int(x + 1, y - 2));
+                    TileBase tt3 = tilemap.GetTile(new Vector3Int(x + 2, y - 1));
+
+                    if (tt1 != null || tt2 != null || tt3 != null)
+                    {
+                        return false;
+                    }
+                }
+                else if (rotatePosition == 4)
+                {
+                    TileBase tt1 = tilemap.GetTile(new Vector3Int(x, y - 3));
+                    TileBase tt2 = tilemap.GetTile(new Vector3Int(x - 1, y - 2));
+
+                    if (tt1 != null || tt2 != null)
+                    {
+                        return false;
+                    }
                 }
 
                 SetTiles(tilemap, null);
@@ -166,6 +237,16 @@ public class Piece
 
             case Tetromino.O:
                 return (y == 1);
+
+            case Tetromino.T:
+                if (rotatePosition == 1 || rotatePosition == 3)
+                {
+                    return (y == 1);
+                }
+                else
+                {
+                    return (y == 2);
+                }
         }
 
         return false;
@@ -176,7 +257,7 @@ public class Piece
         switch (type)
         {
             case Tetromino.I:
-                
+
                 if (x == 0)
                 {
                     return false;
@@ -218,6 +299,30 @@ public class Piece
                 SetTiles(tilemap, null);
                 x -= 1;
                 SetTiles(tilemap, tile);
+
+                break;
+
+            case Tetromino.T:
+
+                if (rotatePosition == 1)
+                {
+                    if (x == 1)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x - 1, y));
+                    TileBase t2 = tilemap.GetTile(new Vector3Int(x - 2, y - 1));
+
+                    if (t1 != null || t2 != null)
+                    {
+                        return false;
+                    }
+
+                    SetTiles(tilemap, null);
+                    x -= 1;
+                    SetTiles(tilemap, tile);
+                }
 
                 break;
         }
@@ -277,6 +382,30 @@ public class Piece
                 SetTiles(tilemap, tile);
 
                 break;
+
+            case Tetromino.T:
+
+                if (rotatePosition == 1)
+                {
+                    if (x == Board.BOARD_WIDTH - 2)
+                    {
+                        return false;
+                    }
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x + 1, y));
+                    TileBase t2 = tilemap.GetTile(new Vector3Int(x + 2, y - 1));
+
+                    if (t1 != null || t2 != null)
+                    {
+                        return false;
+                    }
+
+                    SetTiles(tilemap, null);
+                    x += 1;
+                    SetTiles(tilemap, tile);
+                }
+
+                break;
         }
         return true;
     }
@@ -288,15 +417,14 @@ public class Piece
             case Tetromino.I:
                 if (rotatePosition == 1)
                 {
-                    if(x == Board.BOARD_WIDTH - 1)
+                    if (x == Board.BOARD_WIDTH - 1)
                     {
-                        TileBase t1 = tilemap.GetTile(new Vector3Int(x-3, y-1));
-                        TileBase t2 = tilemap.GetTile(new Vector3Int(x-2, y-1));
-                        TileBase t3 = tilemap.GetTile(new Vector3Int(x-1, y-1));
+                        TileBase t1 = tilemap.GetTile(new Vector3Int(x - 3, y - 1));
+                        TileBase t2 = tilemap.GetTile(new Vector3Int(x - 2, y - 1));
+                        TileBase t3 = tilemap.GetTile(new Vector3Int(x - 1, y - 1));
 
                         if (t1 != null || t2 != null || t3 != null)
                         {
-                            // Collision
                             return false;
                         }
 
@@ -306,7 +434,7 @@ public class Piece
                         rotatePosition = 2;
                         SetTiles(tilemap, tile);
                     }
-                    else if(x == Board.BOARD_WIDTH - 2)
+                    else if (x == Board.BOARD_WIDTH - 2)
                     {
                         TileBase t1 = tilemap.GetTile(new Vector3Int(x - 2, y - 1));
                         TileBase t2 = tilemap.GetTile(new Vector3Int(x - 1, y - 1));
@@ -315,7 +443,6 @@ public class Piece
 
                         if (t1 != null || t2 != null || t3 != null)
                         {
-                            // Collision
                             return false;
                         }
 
@@ -334,7 +461,6 @@ public class Piece
 
                         if (t1 != null || t2 != null || t3 != null)
                         {
-                            // Collision
                             return false;
                         }
 
@@ -352,7 +478,6 @@ public class Piece
 
                         if (t1 != null || t2 != null || t3 != null)
                         {
-                            // Collision
                             return false;
                         }
 
@@ -378,13 +503,31 @@ public class Piece
 
                     if (t1 != null || t2 != null || t3 != null)
                     {
-                        // Collision
                         return false;
                     }
 
                     SetTiles(tilemap, null);
                     x += 1;
                     rotatePosition = 1;
+                    SetTiles(tilemap, tile);
+                }
+                break;
+
+            case Tetromino.T:
+                if (rotatePosition == 1)
+                {
+
+
+
+                    TileBase t1 = tilemap.GetTile(new Vector3Int(x, y + 2));
+
+                    if (t1 != null) 
+                    {
+                        return false;
+                    }
+
+                    SetTiles(tilemap, null);
+                    rotatePosition = 2;
                     SetTiles(tilemap, tile);
                 }
                 break;

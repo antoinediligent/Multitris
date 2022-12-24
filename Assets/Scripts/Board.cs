@@ -15,6 +15,7 @@ public class Board : MonoBehaviour
     private Vector3Int spawnSpot = new Vector3Int(4, 19);
 
     private float lastUpdate;
+    private bool canGoDown = true;
     private Piece activePiece;
 
     private float lastInput;
@@ -30,6 +31,20 @@ public class Board : MonoBehaviour
 
     void Update()
     {
+        /**
+         * Don't instantiate a new piece here to let the player the opportunity to make a move
+         */
+        if (lastUpdate + 0.2f < Time.time)
+        {
+            canGoDown = activePiece.Down(tilemap);
+            lastUpdate = Time.time;
+
+            if (canGoDown)
+            {
+                canGoDown = !activePiece.IsAtBottom();
+            }
+        }
+        
         if (Time.time > lastInput + 0.1f)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
@@ -49,16 +64,10 @@ public class Board : MonoBehaviour
             activePiece.Rotate(tilemap);
         }
 
-        if (lastUpdate + 0.2f < Time.time)
+        if (!canGoDown)
         {
-            bool ok = activePiece.Down(tilemap);
-            lastUpdate = Time.time;
-
-            if (!ok || activePiece.IsAtBottom())
-            {
-                activePiece = new Piece(Tetromino.O, spawnSpot.x, spawnSpot.y, playerOneSprite);
-                activePiece.SetTiles(tilemap);
-            }
+            activePiece = new Piece(Tetromino.T, spawnSpot.x, spawnSpot.y, playerOneSprite);
+            activePiece.SetTiles(tilemap);
         }
     }
     
