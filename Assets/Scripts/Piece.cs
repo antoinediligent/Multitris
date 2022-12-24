@@ -23,6 +23,22 @@ public enum Tetromino
  *    x
  *   
  * 2) xxxx
+ * 
+ * T piece rotatePosition :
+ * 
+ * 1)  x
+ *    xxx
+ *    
+ * 2) x
+ *    xx
+ *    x
+ * 
+ * 3) xxx
+ *     x
+ *     
+ * 4)  x
+ *    xx
+ *     x
  */
 public class Piece
 {
@@ -60,6 +76,13 @@ public class Piece
                     tilemap.SetTile(new Vector3Int(x + 3, y), tileToSet);
                 }
                 break;
+
+            case Tetromino.O:
+                tilemap.SetTile(new Vector3Int(x, y), tileToSet);
+                tilemap.SetTile(new Vector3Int(x + 1, y), tileToSet);
+                tilemap.SetTile(new Vector3Int(x, y - 1), tileToSet);
+                tilemap.SetTile(new Vector3Int(x + 1, y - 1), tileToSet);
+                break;
         }
     }
 
@@ -75,9 +98,9 @@ public class Piece
             case Tetromino.I:
                 if (rotatePosition == 1)
                 {
-                    TileBase t = tilemap.GetTile(new Vector3Int(x, y - 4));
+                    TileBase it = tilemap.GetTile(new Vector3Int(x, y - 4));
 
-                    if (t != null)
+                    if (it != null)
                     {
                         // Collision
                         return false;
@@ -89,12 +112,12 @@ public class Piece
                 }
                 else if (rotatePosition == 2)
                 {
-                    TileBase t1 = tilemap.GetTile(new Vector3Int(x, y - 1));
-                    TileBase t2 = tilemap.GetTile(new Vector3Int(x + 1, y - 1));
-                    TileBase t3 = tilemap.GetTile(new Vector3Int(x + 2, y - 1));
-                    TileBase t4 = tilemap.GetTile(new Vector3Int(x + 3, y - 1));
+                    TileBase it1 = tilemap.GetTile(new Vector3Int(x, y - 1));
+                    TileBase it2 = tilemap.GetTile(new Vector3Int(x + 1, y - 1));
+                    TileBase it3 = tilemap.GetTile(new Vector3Int(x + 2, y - 1));
+                    TileBase it4 = tilemap.GetTile(new Vector3Int(x + 3, y - 1));
 
-                    if (t1 != null || t2 != null || t3 != null || t4 != null)
+                    if (it1 != null || it2 != null || it3 != null || it4 != null)
                     {
                         // Collision
                         return false;
@@ -104,6 +127,22 @@ public class Piece
                     y--;
                     SetTiles(tilemap, tile);
                 }
+                break;
+
+            case Tetromino.O:
+
+                TileBase ot1 = tilemap.GetTile(new Vector3Int(x, y - 2));
+                TileBase ot2 = tilemap.GetTile(new Vector3Int(x + 1, y - 2));
+
+                if (ot1 != null || ot2 != null)
+                {
+                    // Collision
+                    return false;
+                }
+
+                SetTiles(tilemap, null);
+                y--;
+                SetTiles(tilemap, tile);
                 break;
         }
 
@@ -124,6 +163,9 @@ public class Piece
                     return (y == 0);
                 }
                 break;
+
+            case Tetromino.O:
+                return (y == 1);
         }
 
         return false;
@@ -158,6 +200,19 @@ public class Piece
                     {
                         return false;
                     }
+                }
+
+                SetTiles(tilemap, null);
+                x -= 1;
+                SetTiles(tilemap, tile);
+
+                break;
+
+            case Tetromino.O:
+
+                if (x == 0)
+                {
+                    return false;
                 }
 
                 SetTiles(tilemap, null);
@@ -202,6 +257,19 @@ public class Piece
                     {
                         return false;
                     }
+                }
+
+                SetTiles(tilemap, null);
+                x += 1;
+                SetTiles(tilemap, tile);
+
+                break;
+
+            case Tetromino.O:
+
+                if (x == Board.BOARD_WIDTH - 2)
+                {
+                    return false;
                 }
 
                 SetTiles(tilemap, null);

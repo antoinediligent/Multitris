@@ -56,7 +56,7 @@ public class Board : MonoBehaviour
 
             if (!ok || activePiece.IsAtBottom())
             {
-                activePiece = new Piece(Tetromino.I, spawnSpot.x, spawnSpot.y, playerOneSprite);
+                activePiece = new Piece(Tetromino.O, spawnSpot.x, spawnSpot.y, playerOneSprite);
                 activePiece.SetTiles(tilemap);
             }
         }
