@@ -246,6 +246,22 @@ public class T : Piece
         return true;
     }
 
+    /*
+     * T piece rotatePosition :
+     * 1)  x
+     *    xxx
+     *    
+     * 2) x
+     *    xx
+     *    x
+     * 
+     * 3) xxx
+     *     x
+     *     
+     * 4)  x
+     *    xx
+     *     x
+     */
     public override bool Rotate(Tilemap tilemap)
     {
         if (rotatePosition == 1)

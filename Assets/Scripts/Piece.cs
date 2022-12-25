@@ -14,31 +14,6 @@ public enum Tetromino
     L,
 }
 
-/**
- * I piece rotatePosition :
- * 1) x
- *    x
- *    x
- *    x
- *   
- * 2) xxxx
- * 
- * 
- * T piece rotatePosition :
- * 1)  x
- *    xxx
- *    
- * 2) x
- *    xx
- *    x
- * 
- * 3) xxx
- *     x
- *     
- * 4)  x
- *    xx
- *     x
- */
 public class Piece
 {
     protected Tetromino type;

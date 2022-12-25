@@ -145,6 +145,15 @@ public class I : Piece
         return true;
     }
 
+    /**
+     * I piece rotatePosition :
+     * 1) x
+     *    x
+     *    x
+     *    x
+     *   
+     * 2) xxxx
+     */
     public override bool Rotate(Tilemap tilemap)
     {
         if (rotatePosition == 1)
