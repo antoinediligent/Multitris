@@ -27,8 +27,13 @@ public class Board : MonoBehaviour
     {
         tilemap = GetComponentInChildren<Tilemap>();
 
-        activePiece = new Piece(Tetromino.Z, spawnSpot.x, spawnSpot.y, playerOneSprite);
+        activePiece = NewPiece();
         activePiece.SetTiles(tilemap);
+    }
+
+    Piece NewPiece()
+    {
+        return new O(Tetromino.O, spawnSpot.x, spawnSpot.y, playerOneSprite);
     }
 
     void Update()
@@ -74,11 +79,9 @@ public class Board : MonoBehaviour
                 lastInput = Time.time;
             }
 
-            // Check again if the piece can go down, maybe user move it where it can go down
-
             if (!ok || activePiece.IsAtBottom())
             {
-                activePiece = new Piece(Tetromino.Z, spawnSpot.x, spawnSpot.y, playerOneSprite);
+                activePiece = NewPiece();
                 activePiece.SetTiles(tilemap);
             }
         }
