@@ -33,7 +33,7 @@ public class Board : MonoBehaviour
 
     Piece NewPiece()
     {
-        return new O(Tetromino.O, spawnSpot.x, spawnSpot.y, playerOneSprite);
+        return new I(spawnSpot.x, spawnSpot.y, playerOneSprite);
     }
 
     void Update()

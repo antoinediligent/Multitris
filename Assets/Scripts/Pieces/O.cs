@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class O : Piece
 {
-    public O(Tetromino type, int x, int y, Sprite sprite) : base(type, x, y, sprite)
+    public O(int x, int y, Sprite sprite) : base(Tetromino.O, x, y, sprite)
     {
     }
 
