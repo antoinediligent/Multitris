@@ -72,8 +72,8 @@ public class J : Piece
         else if (rotatePosition == 4)
         {
             TileBase t1 = tilemap.GetTile(new Vector3Int(x, y - 1));
-            TileBase t2 = tilemap.GetTile(new Vector3Int(x + 1, y - 2));
-            TileBase t3 = tilemap.GetTile(new Vector3Int(x + 2, y - 3));
+            TileBase t2 = tilemap.GetTile(new Vector3Int(x + 1, y - 1));
+            TileBase t3 = tilemap.GetTile(new Vector3Int(x + 2, y - 2));
 
             if (t1 != null || t2 != null || t3 != null)
             {
@@ -137,7 +137,7 @@ public class J : Piece
         }
         else if (rotatePosition == 3)
         {
-            if (x == Board.BOARD_WIDTH - 1)
+            if (x == 0)
             {
                 return false;
             }
@@ -153,7 +153,7 @@ public class J : Piece
         }
         else if (rotatePosition == 4)
         {
-            if (x == Board.BOARD_WIDTH - 2)
+            if (x == 0)
             {
                 return false;
             }
