@@ -19,6 +19,10 @@ public class Piece
     protected int x, y;
     protected Tile tile;
 
+    public Board board;
+    public Vector3Int[] cells { get; protected set; }
+    // public Vector3Int position { get; private set; }
+
     public Piece(Tetromino type, int x, int y, Sprite sprite)
     {
         this.type = type;
