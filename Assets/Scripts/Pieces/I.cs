@@ -42,51 +42,22 @@ public class I : Piece
             SetTiles(tilemap, null);
             SetCells(2);
 
-            // Try one cell on the left to harmonize with the other rotation
-            Vector3Int nextPosition = new Vector3Int(x - 1, y - 1);
-            if (board.IsValidPosition(this, nextPosition))
+            Vector3Int[] nextPositions = new Vector3Int[4];
+            nextPositions[0] = position + new Vector3Int(-1, -1);
+            nextPositions[1] = position + new Vector3Int(0, -1);
+            nextPositions[2] = position + new Vector3Int(-2, -1);
+            nextPositions[3] = position + new Vector3Int(-3, -1);
+
+            foreach (Vector3Int nextPosition in nextPositions)
             {
-                x -= 1;
-                y -= 1;
-                rotatePosition = 2;
-                SetTiles(tilemap, tile);
+                if (board.IsValidPosition(this, nextPosition))
+                {
+                    position = nextPosition;
+                    rotatePosition = 2;
+                    SetTiles(tilemap, tile);
 
-                return true;
-            }
-
-            // If the piece is on the left border
-            nextPosition = new Vector3Int(x, y - 1);
-            if (board.IsValidPosition(this, nextPosition))
-            {
-                y -= 1;
-                rotatePosition = 2;
-                SetTiles(tilemap, tile);
-
-                return true;
-            }
-
-            // Try one more cell on the left
-            nextPosition = new Vector3Int(x - 2, y - 1);
-            if (board.IsValidPosition(this, nextPosition))
-            {
-                x -= 2;
-                y -= 1;
-                rotatePosition = 2;
-                SetTiles(tilemap, tile);
-
-                return true;
-            }
-
-            // Try one more cell on the left
-            nextPosition = new Vector3Int(x - 3, y - 1);
-            if (board.IsValidPosition(this, nextPosition))
-            {
-                x -= 3;
-                y -= 1;
-                rotatePosition = 2;
-                SetTiles(tilemap, tile);
-
-                return true;
+                    return true;
+                }
             }
 
             // Not ok, move back to previous position
@@ -100,36 +71,21 @@ public class I : Piece
             SetTiles(tilemap, null);
             SetCells(1);
 
-            Vector3Int nextPosition = new Vector3Int(x + 1, y);
-            if (board.IsValidPosition(this, nextPosition))
+            Vector3Int[] nextPositions = new Vector3Int[3];
+            nextPositions[0] = position + new Vector3Int(1, 0);
+            nextPositions[1] = position + new Vector3Int(1, 1);
+            nextPositions[2] = position + new Vector3Int(1, 2);
+
+            foreach (Vector3Int nextPosition in nextPositions)
             {
-                x += 1;
-                rotatePosition = 1;
-                SetTiles(tilemap, tile);
+                if (board.IsValidPosition(this, nextPosition))
+                {
+                    position = nextPosition;
+                    rotatePosition = 1;
+                    SetTiles(tilemap, tile);
 
-                return true;
-            }
-
-            nextPosition = new Vector3Int(x + 1, y + 1);
-            if (board.IsValidPosition(this, nextPosition))
-            {
-                x += 1;
-                y += 1;
-                rotatePosition = 1;
-                SetTiles(tilemap, tile);
-
-                return true;
-            }
-
-            nextPosition = new Vector3Int(x + 1, y + 2);
-            if (board.IsValidPosition(this, nextPosition))
-            {
-                x += 1;
-                y += 2;
-                rotatePosition = 1;
-                SetTiles(tilemap, tile);
-
-                return true;
+                    return true;
+                }
             }
 
             // Not the last possibility, because it would give the player a way to make the piece go up

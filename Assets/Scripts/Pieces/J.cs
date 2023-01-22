@@ -43,34 +43,21 @@ public class J : Piece
             SetTiles(tilemap, null);
             SetCells(2);
 
-            Vector3Int nextPosition = new Vector3Int(x - 1, y);
-            if (board.IsValidPosition(this, nextPosition))
+            Vector3Int[] nextPositions = new Vector3Int[3];
+            nextPositions[0] = position + new Vector3Int(-1, 0);
+            nextPositions[1] = position + new Vector3Int(0, 0);
+            nextPositions[2] = position + new Vector3Int(-2, -1);
+
+            foreach (Vector3Int nextPosition in nextPositions)
             {
-                x -= 1;
-                rotatePosition = 2;
-                SetTiles(tilemap, tile);
+                if (board.IsValidPosition(this, nextPosition))
+                {
+                    position = nextPosition;
+                    rotatePosition = 2;
+                    SetTiles(tilemap, tile);
 
-                return true;
-            }
-
-            nextPosition = new Vector3Int(x, y);
-            if (board.IsValidPosition(this, nextPosition))
-            {
-                rotatePosition = 2;
-                SetTiles(tilemap, tile);
-
-                return true;
-            }
-
-            nextPosition = new Vector3Int(x - 2, y - 1);
-            if (board.IsValidPosition(this, nextPosition))
-            {
-                x -= 2;
-                y -= 1;
-                rotatePosition = 2;
-                SetTiles(tilemap, tile);
-
-                return true;
+                    return true;
+                }
             }
 
             // Not ok, move back to previous position
@@ -84,9 +71,10 @@ public class J : Piece
             SetTiles(tilemap, null);
             SetCells(3);
 
-            Vector3Int nextPosition = new Vector3Int(x, y);
+            Vector3Int nextPosition = position + new Vector3Int(0, 0);
             if (board.IsValidPosition(this, nextPosition))
             {
+                position = nextPosition;
                 rotatePosition = 3;
                 SetTiles(tilemap, tile);
 
@@ -104,24 +92,20 @@ public class J : Piece
             SetTiles(tilemap, null);
             SetCells(4);
 
-            Vector3Int nextPosition = new Vector3Int(x, y);
-            if (board.IsValidPosition(this, nextPosition))
+            Vector3Int[] nextPositions = new Vector3Int[2];
+            nextPositions[0] = position + new Vector3Int(0, 0);
+            nextPositions[1] = position + new Vector3Int(-1, -1);
+
+            foreach (Vector3Int nextPosition in nextPositions)
             {
-                rotatePosition = 4;
-                SetTiles(tilemap, tile);
+                if (board.IsValidPosition(this, nextPosition))
+                {
+                    position = nextPosition;
+                    rotatePosition = 4;
+                    SetTiles(tilemap, tile);
 
-                return true;
-            }
-
-            nextPosition = new Vector3Int(x - 1, y - 1);
-            if (board.IsValidPosition(this, nextPosition))
-            {
-                x -= 1;
-                y -= 1;
-                rotatePosition = 2;
-                SetTiles(tilemap, tile);
-
-                return true;
+                    return true;
+                }
             }
 
             // Not ok, move back to previous position
@@ -135,23 +119,20 @@ public class J : Piece
             SetTiles(tilemap, null);
             SetCells(1);
 
-            Vector3Int nextPosition = new Vector3Int(x + 1, y);
-            if (board.IsValidPosition(this, nextPosition))
+            Vector3Int[] nextPositions = new Vector3Int[2];
+            nextPositions[0] = position + new Vector3Int(1, 0);
+            nextPositions[1] = position + new Vector3Int(0, 0);
+
+            foreach (Vector3Int nextPosition in nextPositions)
             {
-                x += 1;
-                rotatePosition = 1;
-                SetTiles(tilemap, tile);
+                if (board.IsValidPosition(this, nextPosition))
+                {
+                    position = nextPosition;
+                    rotatePosition = 1;
+                    SetTiles(tilemap, tile);
 
-                return true;
-            }
-
-            nextPosition = new Vector3Int(x, y);
-            if (board.IsValidPosition(this, nextPosition))
-            {
-                rotatePosition = 1;
-                SetTiles(tilemap, tile);
-
-                return true;
+                    return true;
+                }
             }
 
             // Not ok, move back to previous position

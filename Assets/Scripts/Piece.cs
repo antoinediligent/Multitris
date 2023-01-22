@@ -15,20 +15,22 @@ public enum Tetromino
 public class Piece
 {
     protected Tetromino type;
+
     protected int rotatePosition;
-    protected int x, y;
+    public Vector3Int position { get; set; }
+
     protected Tile tile;
 
     public Board board;
     public Vector3Int[] cells { get; protected set; }
-    // public Vector3Int position { get; private set; }
+
+    protected int x, y;
 
     public Piece(Tetromino type, int x, int y, Sprite sprite)
     {
         this.type = type;
-        this.rotatePosition = 1;
-        this.x = x;
-        this.y = y;
+        rotatePosition = 1;
+        position = new Vector3Int(x, y);
         tile = Tile.CreateInstance<Tile>();
         tile.sprite = sprite;
 
@@ -41,9 +43,8 @@ public class Piece
 
     }
 
-    public virtual void SetTiles(Tilemap tilemap, Tile tileToSet)
+    public void SetTiles(Tilemap tilemap, Tile tileToSet)
     {
-        Vector3Int position = new Vector3Int(x, y);
         tilemap.SetTile(position + cells[0], tileToSet);
         tilemap.SetTile(position + cells[1], tileToSet);
         tilemap.SetTile(position + cells[2], tileToSet);
@@ -59,10 +60,10 @@ public class Piece
     {
         SetTiles(tilemap, null);
 
-        Vector3Int nextPosition = new Vector3Int(x, y - 1);
+        Vector3Int nextPosition = position + Vector3Int.down;
         if (board.IsValidPosition(this, nextPosition))
         {
-            y--;
+            position = nextPosition;
             SetTiles(tilemap, tile);
 
             return true;
@@ -77,10 +78,10 @@ public class Piece
     {
         SetTiles(tilemap, null);
 
-        Vector3Int nextPosition = new Vector3Int(x - 1, y);
+        Vector3Int nextPosition = position + Vector3Int.left;
         if (board.IsValidPosition(this, nextPosition))
         {
-            x--;
+            position = nextPosition;
             SetTiles(tilemap, tile);
 
             return true;
@@ -95,10 +96,10 @@ public class Piece
     {
         SetTiles(tilemap, null);
 
-        Vector3Int nextPosition = new Vector3Int(x + 1, y);
+        Vector3Int nextPosition = position + Vector3Int.right;
         if (board.IsValidPosition(this, nextPosition))
         {
-            x++;
+            position = nextPosition;
             SetTiles(tilemap, tile);
 
             return true;
