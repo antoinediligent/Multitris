@@ -5,7 +5,6 @@ public class J : Piece
 {
     public J(int x, int y, Sprite sprite) : base(Tetromino.O, x, y, sprite)
     {
-
     }
 
     protected override void SetCells(int rotatePosition)

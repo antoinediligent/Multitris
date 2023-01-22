@@ -7,32 +7,32 @@ public class L : Piece
     {
     }
 
-    public override void SetTiles(Tilemap tilemap, Tile tileToSet)
+    protected override void SetCells(int rotatePosition)
     {
-        tilemap.SetTile(new Vector3Int(x, y), tileToSet);
+        cells[0] = new Vector3Int(0, 0);
         if (rotatePosition == 1)
         {
-            tilemap.SetTile(new Vector3Int(x, y - 1), tileToSet);
-            tilemap.SetTile(new Vector3Int(x, y - 2), tileToSet);
-            tilemap.SetTile(new Vector3Int(x + 1, y - 2), tileToSet);
+            cells[1] = new Vector3Int(0, -1);
+            cells[2] = new Vector3Int(0, -2);
+            cells[3] = new Vector3Int(1, -2);
         }
         else if (rotatePosition == 2)
         {
-            tilemap.SetTile(new Vector3Int(x, y - 1), tileToSet);
-            tilemap.SetTile(new Vector3Int(x + 1, y), tileToSet);
-            tilemap.SetTile(new Vector3Int(x + 2, y), tileToSet);
+            cells[1] = new Vector3Int(0, -1);
+            cells[2] = new Vector3Int(1, 0);
+            cells[3] = new Vector3Int(2, 0);
         }
         else if (rotatePosition == 3)
         {
-            tilemap.SetTile(new Vector3Int(x + 1, y), tileToSet);
-            tilemap.SetTile(new Vector3Int(x + 1, y - 1), tileToSet);
-            tilemap.SetTile(new Vector3Int(x + 1, y - 2), tileToSet);
+            cells[1] = new Vector3Int(1, 0);
+            cells[2] = new Vector3Int(1, -1);
+            cells[3] = new Vector3Int(1, -2);
         }
         else if (rotatePosition == 4)
         {
-            tilemap.SetTile(new Vector3Int(x - 2, y - 1), tileToSet);
-            tilemap.SetTile(new Vector3Int(x - 1, y - 1), tileToSet);
-            tilemap.SetTile(new Vector3Int(x, y - 1), tileToSet);
+            cells[1] = new Vector3Int(-2, -1);
+            cells[2] = new Vector3Int(-1, -1);
+            cells[3] = new Vector3Int(0, -1);
         }
     }
 
@@ -40,76 +40,124 @@ public class L : Piece
     {
         if (rotatePosition == 1)
         {
-            if (x == Board.BOARD_WIDTH - 2)
-            {
-                return false;
-            }
-
-            TileBase t1 = tilemap.GetTile(new Vector3Int(x + 1, y - 1));
-            TileBase t2 = tilemap.GetTile(new Vector3Int(x + 2, y - 1));
-
-            if (t1 != null || t2 != null)
-            {
-                return false;
-            }
-
             SetTiles(tilemap, null);
-            y--;
-            rotatePosition = 2;
+            SetCells(2);
+
+            Vector3Int nextPosition = new Vector3Int(x - 1, y);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                x -= 1;
+                rotatePosition = 2;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            nextPosition = new Vector3Int(x, y);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                rotatePosition = 2;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            // Not ok, move back to previous position
+            SetCells(1);
             SetTiles(tilemap, tile);
+
+            return false;
         }
         else if (rotatePosition == 2)
         {
-            TileBase t1 = tilemap.GetTile(new Vector3Int(x + 1, y - 1));
-            TileBase t2 = tilemap.GetTile(new Vector3Int(x, y + 1));
-            TileBase t3 = tilemap.GetTile(new Vector3Int(x + 1, y + 1));
+            SetTiles(tilemap, null);
+            SetCells(3);
 
-            if (t1 != null || t2 != null || t3 != null)
+            Vector3Int nextPosition = new Vector3Int(x + 1, y);
+            if (board.IsValidPosition(this, nextPosition))
             {
-                return false;
+                x += 1;
+                rotatePosition = 3;
+                SetTiles(tilemap, tile);
+
+                return true;
             }
 
-            SetTiles(tilemap, null);
-            y++;
-            rotatePosition = 3;
+            // Not ok, move back to previous position
+            SetCells(2);
             SetTiles(tilemap, tile);
+
+            return false;
         }
         else if (rotatePosition == 3)
         {
-            if (x == Board.BOARD_WIDTH - 2)
-            {
-                return false;
-            }
-
-            TileBase t1 = tilemap.GetTile(new Vector3Int(x, y - 1));
-            TileBase t2 = tilemap.GetTile(new Vector3Int(x + 2, y));
-            TileBase t3 = tilemap.GetTile(new Vector3Int(x + 2, y - 1));
-
-            if (t1 != null || t2 != null || t3 != null)
-            {
-                return false;
-            }
-
             SetTiles(tilemap, null);
-            x += 2;
-            rotatePosition = 4;
+            SetCells(4);
+
+            Vector3Int nextPosition = new Vector3Int(x + 1, y);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                x += 1;
+                rotatePosition = 4;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            nextPosition = new Vector3Int(x, y);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                rotatePosition = 4;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            nextPosition = new Vector3Int(x + 2, y);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                x += 2;
+                rotatePosition = 4;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            // Not ok, move back to previous position
+            SetCells(3);
             SetTiles(tilemap, tile);
+
+            return false;
         }
         else if (rotatePosition == 4)
         {
-            TileBase t1 = tilemap.GetTile(new Vector3Int(x - 1, y));
-            TileBase t2 = tilemap.GetTile(new Vector3Int(x - 1, y + 1));
+            SetTiles(tilemap, null);
+            SetCells(1);
 
-            if (t1 != null || t2 != null)
+            Vector3Int nextPosition = new Vector3Int(x - 1, y);
+            if (board.IsValidPosition(this, nextPosition))
             {
-                return false;
+                x -= 1;
+                rotatePosition = 1;
+                SetTiles(tilemap, tile);
+
+                return true;
             }
 
-            SetTiles(tilemap, null);
-            x--;
-            y += 2;
-            rotatePosition = 1;
+            nextPosition = new Vector3Int(x, y);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                rotatePosition = 1;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            // Not ok, move back to previous position
+            SetCells(4);
             SetTiles(tilemap, tile);
+
+            return false;
         }
 
         return true;
