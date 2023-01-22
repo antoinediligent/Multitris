@@ -3,9 +3,8 @@ using UnityEngine.Tilemaps;
 
 public class O : Piece
 {
-    public O(int x, int y, Sprite sprite) : base(Tetromino.O, x, y, sprite)
+    public O(Vector3Int position, Sprite sprite) : base(Tetromino.O, position, sprite)
     {
-
     }
 
     protected override void SetCells(int rotatePosition)

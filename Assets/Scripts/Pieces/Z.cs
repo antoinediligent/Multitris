@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 public class Z : Piece
 {
-    public Z(int x, int y, Sprite sprite) : base(Tetromino.Z, x, y, sprite)
+    public Z(Vector3Int position, Sprite sprite) : base(Tetromino.Z, position, sprite)
     {
     }
 

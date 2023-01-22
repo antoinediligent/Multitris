@@ -24,13 +24,11 @@ public class Piece
     public Board board;
     public Vector3Int[] cells { get; protected set; }
 
-    protected int x, y;
-
-    public Piece(Tetromino type, int x, int y, Sprite sprite)
+    public Piece(Tetromino type, Vector3Int position, Sprite sprite)
     {
         this.type = type;
         rotatePosition = 1;
-        position = new Vector3Int(x, y);
+        this.position = position;
         tile = Tile.CreateInstance<Tile>();
         tile.sprite = sprite;
 

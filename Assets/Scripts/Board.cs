@@ -3,8 +3,6 @@ using UnityEngine.Tilemaps;
 
 public class Board : MonoBehaviour
 {
-    public const int BOARD_WIDTH = 10;
-
     public Vector2Int boardSize = new Vector2Int(10, 20);
 
     public Sprite playerOneSprite;
@@ -40,17 +38,39 @@ public class Board : MonoBehaviour
 
     Piece NewPiece()
     {
-        int pieceNumber = Random.Range(1, 3);
+        int pieceNumber = Random.Range(1, 8);
 
         Piece piece;
 
-        if (pieceNumber == 1)
+        switch (pieceNumber)
         {
-            piece = new S(spawnSpot.x, spawnSpot.y, playerOneSprite);
-        }
-        else
-        {
-            piece = new S(spawnSpot.x, spawnSpot.y, playerOneSprite);
+            case 1:
+                piece = new I(spawnSpot, playerOneSprite);
+                break;
+
+            case 2:
+                piece = new J(spawnSpot, playerOneSprite);
+                break;
+
+            case 3:
+                piece = new L(spawnSpot, playerOneSprite);
+                break;
+
+            case 4:
+                piece = new O(spawnSpot, playerOneSprite);
+                break;
+
+            case 5:
+                piece = new S(spawnSpot, playerOneSprite);
+                break;
+
+            case 6:
+                piece = new T(spawnSpot, playerOneSprite);
+                break;
+
+            default:
+                piece = new Z(spawnSpot, playerOneSprite);
+                break;
         }
 
         piece.board = this;
