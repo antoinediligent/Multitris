@@ -31,6 +31,14 @@ public class Piece
         this.y = y;
         tile = Tile.CreateInstance<Tile>();
         tile.sprite = sprite;
+
+        cells = new Vector3Int[4];
+        SetCells(1);
+    }
+
+    protected virtual void SetCells(int rotatePosition)
+    {
+
     }
 
     public virtual void SetTiles(Tilemap tilemap, Tile tileToSet)

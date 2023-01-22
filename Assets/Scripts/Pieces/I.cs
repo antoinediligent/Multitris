@@ -5,11 +5,10 @@ public class I : Piece
 {
     public I(int x, int y, Sprite sprite) : base(Tetromino.I, x, y, sprite)
     {
-        cells = new Vector3Int[4];
-        SetCells(1);
+
     }
 
-    private void SetCells(int rotatePosition)
+    protected override void SetCells(int rotatePosition)
     {
         if (rotatePosition == 1)
         {

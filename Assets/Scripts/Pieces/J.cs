@@ -5,11 +5,10 @@ public class J : Piece
 {
     public J(int x, int y, Sprite sprite) : base(Tetromino.O, x, y, sprite)
     {
-        cells = new Vector3Int[4];
-        SetCells(1);
+
     }
 
-    private void SetCells(int rotatePosition)
+    protected override void SetCells(int rotatePosition)
     {
         if (rotatePosition == 1)
         {
@@ -39,6 +38,8 @@ public class J : Piece
 
     public override bool Rotate(Tilemap tilemap)
     {
+        // TODO : fix that it works everywhere it's possible
+        // TODO : fix that it moves at a nicer position at the same time
         if (rotatePosition == 1)
         {
             SetTiles(tilemap, null);
