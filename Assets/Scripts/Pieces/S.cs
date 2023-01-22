@@ -31,24 +31,20 @@ public class S : Piece
             SetTiles(tilemap, null);
             SetCells(2);
 
-            Vector3Int nextPosition = new Vector3Int(x - 1, y);
-            if (board.IsValidPosition(this, nextPosition))
+            Vector3Int[] nextPositions = new Vector3Int[2];
+            nextPositions[0] = position + new Vector3Int(-1, 0);
+            nextPositions[1] = position + new Vector3Int(-2, 0);
+
+            foreach (Vector3Int nextPosition in nextPositions)
             {
-                x -= 1;
-                rotatePosition = 2;
-                SetTiles(tilemap, tile);
+                if (board.IsValidPosition(this, nextPosition))
+                {
+                    position = nextPosition;
+                    rotatePosition = 2;
+                    SetTiles(tilemap, tile);
 
-                return true;
-            }
-
-            nextPosition = new Vector3Int(x - 2, y);
-            if (board.IsValidPosition(this, nextPosition))
-            {
-                x -= 2;
-                rotatePosition = 2;
-                SetTiles(tilemap, tile);
-
-                return true;
+                    return true;
+                }
             }
 
             // Not ok, move back to previous position
@@ -62,10 +58,10 @@ public class S : Piece
             SetTiles(tilemap, null);
             SetCells(1);
 
-            Vector3Int nextPosition = new Vector3Int(x + 1, y);
+            Vector3Int nextPosition = position + new Vector3Int( 1, 0);
             if (board.IsValidPosition(this, nextPosition))
             {
-                x += 1;
+                position = nextPosition;
                 rotatePosition = 1;
                 SetTiles(tilemap, tile);
 
