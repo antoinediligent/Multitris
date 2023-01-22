@@ -27,49 +27,13 @@ public class I : Piece
         }
     }
 
-    public override bool MoveLeft(Tilemap tilemap)
-    {
-        SetTiles(tilemap, null);
-        
-        Vector3Int nextPosition = new Vector3Int(x - 1, y);
-        if (board.IsValidPosition(this, nextPosition))
-        {
-            x--;
-            SetTiles(tilemap, tile);
-            
-            return true;
-        }
-        
-        SetTiles(tilemap, tile);
-            
-        return false;
-    }
-
-    public override bool MoveRight(Tilemap tilemap)
-    {
-        SetTiles(tilemap, null);
-        
-        Vector3Int nextPosition = new Vector3Int(x + 1, y);
-        if (board.IsValidPosition(this, nextPosition))
-        {
-            x++;
-            SetTiles(tilemap, tile);
-            
-            return true;
-        }
-        
-        SetTiles(tilemap, tile);
-            
-        return false;
-    }
-
     /**
      * I piece rotatePosition :
      * 1) x
      *    x
      *    x
      *    x
-     *   
+     *
      * 2) xxxx
      */
     public override bool Rotate(Tilemap tilemap)
@@ -86,20 +50,20 @@ public class I : Piece
                 x -= 1;
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
-            
+
                 return true;
             }
-            
+
             // If the piece is on the left border
             nextPosition = new Vector3Int(x, y);
             if (board.IsValidPosition(this, nextPosition))
             {
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
-            
+
                 return true;
             }
-            
+
             // Try one more cell on the left
             nextPosition = new Vector3Int(x - 2, y);
             if (board.IsValidPosition(this, nextPosition))
@@ -107,10 +71,10 @@ public class I : Piece
                 x -= 2;
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
-            
+
                 return true;
             }
-            
+
             // Try one more cell on the left
             nextPosition = new Vector3Int(x - 3, y);
             if (board.IsValidPosition(this, nextPosition))
@@ -118,10 +82,10 @@ public class I : Piece
                 x -= 3;
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
-            
+
                 return true;
             }
-            
+
             // Not ok, move back to previous position
             SetCells(1);
             SetTiles(tilemap, tile);
@@ -132,7 +96,7 @@ public class I : Piece
         {
             SetTiles(tilemap, null);
             SetCells(1);
-            
+
             Vector3Int nextPosition = new Vector3Int(x + 1, y);
             if (!board.IsValidPosition(this, nextPosition))
             {
@@ -145,7 +109,7 @@ public class I : Piece
             x += 1;
             rotatePosition = 1;
             SetTiles(tilemap, tile);
-            
+
             return true;
         }
 

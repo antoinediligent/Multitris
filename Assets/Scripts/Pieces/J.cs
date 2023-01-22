@@ -8,7 +8,7 @@ public class J : Piece
         cells = new Vector3Int[4];
         SetCells(1);
     }
-    
+
     private void SetCells(int rotatePosition)
     {
         if (rotatePosition == 1)
@@ -37,58 +37,22 @@ public class J : Piece
         }
     }
 
-    public override bool MoveLeft(Tilemap tilemap)
-    {
-        SetTiles(tilemap, null);
-        
-        Vector3Int nextPosition = new Vector3Int(x - 1, y);
-        if (board.IsValidPosition(this, nextPosition))
-        {
-            x--;
-            SetTiles(tilemap, tile);
-            
-            return true;
-        }
-        
-        SetTiles(tilemap, tile);
-            
-        return false;
-    }
-
-    public override bool MoveRight(Tilemap tilemap)
-    {
-        SetTiles(tilemap, null);
-        
-        Vector3Int nextPosition = new Vector3Int(x + 1, y);
-        if (board.IsValidPosition(this, nextPosition))
-        {
-            x++;
-            SetTiles(tilemap, tile);
-            
-            return true;
-        }
-        
-        SetTiles(tilemap, tile);
-            
-        return false;
-    }
-
     public override bool Rotate(Tilemap tilemap)
     {
         if (rotatePosition == 1)
         {
             SetTiles(tilemap, null);
             SetCells(2);
-            
+
             Vector3Int nextPosition = new Vector3Int(x, y);
             if (board.IsValidPosition(this, nextPosition))
             {
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
-            
+
                 return true;
             }
-            
+
             // Not ok, move back to previous position
             SetCells(1);
             SetTiles(tilemap, tile);
@@ -99,16 +63,16 @@ public class J : Piece
         {
             SetTiles(tilemap, null);
             SetCells(3);
-            
+
             Vector3Int nextPosition = new Vector3Int(x, y);
             if (board.IsValidPosition(this, nextPosition))
             {
                 rotatePosition = 3;
                 SetTiles(tilemap, tile);
-            
+
                 return true;
             }
-            
+
             // Not ok, move back to previous position
             SetCells(2);
             SetTiles(tilemap, tile);
@@ -119,16 +83,16 @@ public class J : Piece
         {
             SetTiles(tilemap, null);
             SetCells(4);
-            
+
             Vector3Int nextPosition = new Vector3Int(x, y);
             if (board.IsValidPosition(this, nextPosition))
             {
                 rotatePosition = 4;
                 SetTiles(tilemap, tile);
-            
+
                 return true;
             }
-            
+
             // Not ok, move back to previous position
             SetCells(3);
             SetTiles(tilemap, tile);
@@ -139,16 +103,16 @@ public class J : Piece
         {
             SetTiles(tilemap, null);
             SetCells(1);
-            
+
             Vector3Int nextPosition = new Vector3Int(x, y);
             if (board.IsValidPosition(this, nextPosition))
             {
                 rotatePosition = 1;
                 SetTiles(tilemap, tile);
-            
+
                 return true;
             }
-            
+
             // Not ok, move back to previous position
             SetCells(4);
             SetTiles(tilemap, tile);

@@ -50,37 +50,55 @@ public class Piece
     public bool Down(Tilemap tilemap)
     {
         SetTiles(tilemap, null);
-        
+
         Vector3Int nextPosition = new Vector3Int(x, y - 1);
         if (board.IsValidPosition(this, nextPosition))
         {
             y--;
             SetTiles(tilemap, tile);
-            
+
             return true;
         }
-        
+
         SetTiles(tilemap, tile);
-            
+
         return false;
     }
 
-    public virtual bool IsAtBottom()
+    public bool MoveLeft(Tilemap tilemap)
     {
-        Debug.Log("IsAtBottom is not supposed to be called");
+        SetTiles(tilemap, null);
+
+        Vector3Int nextPosition = new Vector3Int(x - 1, y);
+        if (board.IsValidPosition(this, nextPosition))
+        {
+            x--;
+            SetTiles(tilemap, tile);
+
+            return true;
+        }
+
+        SetTiles(tilemap, tile);
+
         return false;
     }
 
-    public virtual bool MoveLeft(Tilemap tilemap)
+    public bool MoveRight(Tilemap tilemap)
     {
-        Debug.Log("MoveLeft is not supposed to be called");
-        return true;
-    }
+        SetTiles(tilemap, null);
 
-    public virtual bool MoveRight(Tilemap tilemap)
-    {
-        Debug.Log("MoveRight is not supposed to be called");
-        return true;
+        Vector3Int nextPosition = new Vector3Int(x + 1, y);
+        if (board.IsValidPosition(this, nextPosition))
+        {
+            x++;
+            SetTiles(tilemap, tile);
+
+            return true;
+        }
+
+        SetTiles(tilemap, tile);
+
+        return false;
     }
 
     public virtual bool Rotate(Tilemap tilemap)
