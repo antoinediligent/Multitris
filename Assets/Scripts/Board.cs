@@ -20,6 +20,7 @@ public class Board : MonoBehaviour
 
     int debugCounter = 0;
     bool ok = true;
+    private bool goingDown = false;
 
     public RectInt Bounds {
         get
@@ -45,11 +46,11 @@ public class Board : MonoBehaviour
 
         if (pieceNumber == 1)
         {
-            piece = new I(spawnSpot.x, spawnSpot.y, playerOneSprite);
+            piece = new S(spawnSpot.x, spawnSpot.y, playerOneSprite);
         }
         else
         {
-            piece = new O(spawnSpot.x, spawnSpot.y, playerOneSprite);
+            piece = new S(spawnSpot.x, spawnSpot.y, playerOneSprite);
         }
 
         piece.board = this;
@@ -59,7 +60,7 @@ public class Board : MonoBehaviour
 
     void Update()
     {
-        if (Time.time > lastInput + 0.3f)
+        if (Time.time > lastInput + 0.2f)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
@@ -78,13 +79,29 @@ public class Board : MonoBehaviour
             activePiece.Rotate(tilemap);
         }
 
-        if (lastUpdate + 0.2f < Time.time)
+        if (goingDown && lastUpdate + 0.03f < Time.time)
+        {
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                lastUpdate = Time.time;
+                ok = activePiece.Down(tilemap);
+
+                if (!ok)
+                {
+                    activePiece = NewPiece();
+                    activePiece.SetTiles(tilemap);
+                    goingDown = false;
+                }
+            }
+        }
+        else if (lastUpdate + 0.2f < Time.time)
         {
             ok = true;
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 lastUpdate = Time.time;
                 ok = activePiece.Down(tilemap);
+                goingDown = true;
             }
 
             /*ok = activePiece.Down(tilemap);
@@ -108,6 +125,7 @@ public class Board : MonoBehaviour
             {
                 activePiece = NewPiece();
                 activePiece.SetTiles(tilemap);
+                goingDown = false;
             }
         }
     }
