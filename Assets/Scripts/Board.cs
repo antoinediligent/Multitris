@@ -51,7 +51,7 @@ public class Board : MonoBehaviour
         {
             piece = new O(spawnSpot.x, spawnSpot.y, playerOneSprite);
         }
-        
+
         piece.board = this;
 
         return piece;
@@ -86,7 +86,7 @@ public class Board : MonoBehaviour
                 lastUpdate = Time.time;
                 ok = activePiece.Down(tilemap);
             }
-            
+
             /*ok = activePiece.Down(tilemap);
             lastUpdate = Time.time;
 
@@ -104,7 +104,6 @@ public class Board : MonoBehaviour
                 lastInput = Time.time;
             }*/
 
-            // 
             if (!ok)
             {
                 activePiece = NewPiece();
@@ -117,13 +116,10 @@ public class Board : MonoBehaviour
     {
         RectInt bounds = Bounds;
 
-        string piecePositions = "[";
         // The position is only valid if every cell is valid
         for (int i = 0; i < piece.cells.Length; i++)
         {
             Vector3Int tilePosition = piece.cells[i] + position;
-
-            piecePositions += " x=" + tilePosition.x + " y=" + tilePosition.y;
 
             // An out of bounds tile is invalid
             if (!bounds.Contains((Vector2Int)tilePosition)) {
@@ -137,9 +133,6 @@ public class Board : MonoBehaviour
                 return false;
             }
         }
-
-        piecePositions += "]";
-        Debug.Log(piecePositions);
 
         return true;
     }
