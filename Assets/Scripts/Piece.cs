@@ -35,7 +35,11 @@ public class Piece
 
     public virtual void SetTiles(Tilemap tilemap, Tile tileToSet)
     {
-        Debug.Log("SetTiles is not supposed to be called");
+        Vector3Int position = new Vector3Int(x, y);
+        tilemap.SetTile(position + cells[0], tileToSet);
+        tilemap.SetTile(position + cells[1], tileToSet);
+        tilemap.SetTile(position + cells[2], tileToSet);
+        tilemap.SetTile(position + cells[3], tileToSet);
     }
 
     public void SetTiles(Tilemap tilemap)
@@ -43,10 +47,22 @@ public class Piece
         SetTiles(tilemap, tile);
     }
 
-    public virtual bool Down(Tilemap tilemap)
+    public bool Down(Tilemap tilemap)
     {
-        Debug.Log("Down is not supposed to be called");
-        return true;
+        SetTiles(tilemap, null);
+        
+        Vector3Int nextPosition = new Vector3Int(x, y - 1);
+        if (board.IsValidPosition(this, nextPosition))
+        {
+            y--;
+            SetTiles(tilemap, tile);
+            
+            return true;
+        }
+        
+        SetTiles(tilemap, tile);
+            
+        return false;
     }
 
     public virtual bool IsAtBottom()

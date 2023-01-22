@@ -11,7 +11,7 @@ public class Board : MonoBehaviour
     public Sprite playerTwoSprite;
 
     private Tilemap tilemap;
-    private Vector3Int spawnSpot = new Vector3Int(4, 18);
+    private Vector3Int spawnSpot = new Vector3Int(4, 19);
 
     private float lastUpdate;
     private Piece activePiece;
@@ -39,7 +39,19 @@ public class Board : MonoBehaviour
 
     Piece NewPiece()
     {
-        Piece piece = new O(spawnSpot.x, spawnSpot.y, playerOneSprite);
+        int pieceNumber = Random.Range(1, 3);
+
+        Piece piece;
+
+        if (pieceNumber == 1)
+        {
+            piece = new I(spawnSpot.x, spawnSpot.y, playerOneSprite);
+        }
+        else
+        {
+            piece = new O(spawnSpot.x, spawnSpot.y, playerOneSprite);
+        }
+        
         piece.board = this;
 
         return piece;
@@ -66,7 +78,7 @@ public class Board : MonoBehaviour
             activePiece.Rotate(tilemap);
         }
 
-        if (lastUpdate + 0.3f < Time.time)
+        if (lastUpdate + 0.2f < Time.time)
         {
             ok = true;
             if (Input.GetKey(KeyCode.DownArrow))

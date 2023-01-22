@@ -24,37 +24,6 @@ public class Z : Piece
         }
     }
 
-    public override bool Down(Tilemap tilemap)
-    {
-        if (rotatePosition == 1)
-        {
-            TileBase zt1 = tilemap.GetTile(new Vector3Int(x, y - 2));
-            TileBase zt2 = tilemap.GetTile(new Vector3Int(x + 1, y - 3));
-
-            if (zt1 != null || zt2 != null)
-            {
-                return false;
-            }
-        }
-        else if (rotatePosition == 2)
-        {
-            TileBase zt1 = tilemap.GetTile(new Vector3Int(x - 1, y - 2));
-            TileBase zt2 = tilemap.GetTile(new Vector3Int(x, y - 2));
-            TileBase zt3 = tilemap.GetTile(new Vector3Int(x + 1, y - 1));
-
-            if (zt1 != null || zt2 != null || zt3 != null)
-            {
-                return false;
-            }
-        }
-
-        SetTiles(tilemap, null);
-        y--;
-        SetTiles(tilemap, tile);
-
-        return true;
-    }
-
     public override bool IsAtBottom()
     {
         if (rotatePosition == 1)

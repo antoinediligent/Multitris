@@ -35,59 +35,7 @@ public class L : Piece
             tilemap.SetTile(new Vector3Int(x, y - 1), tileToSet);
         }
     }
-    
-    public override bool Down(Tilemap tilemap)
-    {
-        if (rotatePosition == 1)
-        {
-            TileBase t1 = tilemap.GetTile(new Vector3Int(x, y - 3));
-            TileBase t2 = tilemap.GetTile(new Vector3Int(x + 1, y - 3));
 
-            if (t1 != null || t2 != null)
-            {
-                return false;
-            }
-        }
-        else if (rotatePosition == 2)
-        {
-            TileBase t1 = tilemap.GetTile(new Vector3Int(x, y - 2));
-            TileBase t2 = tilemap.GetTile(new Vector3Int(x + 1, y - 1));
-            TileBase t3 = tilemap.GetTile(new Vector3Int(x + 2, y - 1));
-
-            if (t1 != null || t2 != null || t3 != null)
-            {
-                return false;
-            }
-        }
-        else if (rotatePosition == 3)
-        {
-            TileBase t1 = tilemap.GetTile(new Vector3Int(x, y - 1));
-            TileBase t2 = tilemap.GetTile(new Vector3Int(x + 1, y - 3));
-
-            if (t1 != null || t2 != null)
-            {
-                return false;
-            }
-        }
-        else if (rotatePosition == 4)
-        {
-            TileBase t1 = tilemap.GetTile(new Vector3Int(x - 2, y - 2));
-            TileBase t2 = tilemap.GetTile(new Vector3Int(x - 1, y - 2));
-            TileBase t3 = tilemap.GetTile(new Vector3Int(x, y - 2));
-
-            if (t1 != null || t2 != null || t3 != null)
-            {
-                return false;
-            }
-        }
-        
-        SetTiles(tilemap, null);
-        y--;
-        SetTiles(tilemap, tile);
-        
-        return true;
-    }
-    
     public override bool IsAtBottom()
     {
         if (rotatePosition == 1 || rotatePosition == 3)

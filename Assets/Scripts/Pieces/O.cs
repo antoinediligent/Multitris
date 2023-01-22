@@ -12,24 +12,6 @@ public class O : Piece
         cells[3] = new Vector3Int(1, -1);
     }
 
-    public override bool Down(Tilemap tilemap)
-    {
-        SetTiles(tilemap, null);
-        
-        Vector3Int nextPosition = new Vector3Int(x, y - 1);
-        if (board.IsValidPosition(this, nextPosition))
-        {
-            y--;
-            SetTiles(tilemap, tile);
-            
-            return true;
-        }
-        
-        SetTiles(tilemap, tile);
-            
-        return false;
-    }
-
     public override bool MoveLeft(Tilemap tilemap)
     {
         SetTiles(tilemap, null);
