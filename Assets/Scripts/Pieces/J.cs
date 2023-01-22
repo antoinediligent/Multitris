@@ -10,6 +10,7 @@ public class J : Piece
 
     protected override void SetCells(int rotatePosition)
     {
+        cells[0] = new Vector3Int(0, 0);
         if (rotatePosition == 1)
         {
             cells[1] = new Vector3Int(0, -1);
@@ -38,16 +39,35 @@ public class J : Piece
 
     public override bool Rotate(Tilemap tilemap)
     {
-        // TODO : fix that it works everywhere it's possible
-        // TODO : fix that it moves at a nicer position at the same time
         if (rotatePosition == 1)
         {
             SetTiles(tilemap, null);
             SetCells(2);
 
-            Vector3Int nextPosition = new Vector3Int(x, y);
+            Vector3Int nextPosition = new Vector3Int(x - 1, y);
             if (board.IsValidPosition(this, nextPosition))
             {
+                x -= 1;
+                rotatePosition = 2;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            nextPosition = new Vector3Int(x, y);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                rotatePosition = 2;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            nextPosition = new Vector3Int(x - 2, y - 1);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                x -= 2;
+                y -= 1;
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
 
@@ -94,6 +114,17 @@ public class J : Piece
                 return true;
             }
 
+            nextPosition = new Vector3Int(x - 1, y - 1);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                x -= 1;
+                y -= 1;
+                rotatePosition = 2;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
             // Not ok, move back to previous position
             SetCells(3);
             SetTiles(tilemap, tile);
@@ -105,7 +136,17 @@ public class J : Piece
             SetTiles(tilemap, null);
             SetCells(1);
 
-            Vector3Int nextPosition = new Vector3Int(x, y);
+            Vector3Int nextPosition = new Vector3Int(x + 1, y);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                x += 1;
+                rotatePosition = 1;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            nextPosition = new Vector3Int(x, y);
             if (board.IsValidPosition(this, nextPosition))
             {
                 rotatePosition = 1;
