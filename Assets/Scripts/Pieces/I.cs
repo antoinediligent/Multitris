@@ -122,6 +122,7 @@ public class I : Piece
                 return true;
             }
             
+            // Not ok, move back to previous position
             SetCells(1);
             SetTiles(tilemap, tile);
 
