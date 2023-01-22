@@ -79,20 +79,21 @@ public class I : Piece
             SetTiles(tilemap, null);
             SetCells(2);
 
-            Vector3Int nextPosition = new Vector3Int(x, y);
+            // Try one cell on the left to harmonize with the other rotation
+            Vector3Int nextPosition = new Vector3Int(x - 1, y);
             if (board.IsValidPosition(this, nextPosition))
             {
+                x -= 1;
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
             
                 return true;
             }
             
-            // Try one cell on the left
-            nextPosition = new Vector3Int(x - 1, y);
+            // If the piece is on the left border
+            nextPosition = new Vector3Int(x, y);
             if (board.IsValidPosition(this, nextPosition))
             {
-                x -= 1;
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
             
@@ -131,7 +132,7 @@ public class I : Piece
             SetTiles(tilemap, null);
             SetCells(1);
             
-            Vector3Int nextPosition = new Vector3Int(x, y);
+            Vector3Int nextPosition = new Vector3Int(x + 1, y);
             if (!board.IsValidPosition(this, nextPosition))
             {
                 SetCells(2);
@@ -139,7 +140,8 @@ public class I : Piece
 
                 return false;
             }
-            
+
+            x += 1;
             rotatePosition = 1;
             SetTiles(tilemap, tile);
             
