@@ -43,10 +43,11 @@ public class I : Piece
             SetCells(2);
 
             // Try one cell on the left to harmonize with the other rotation
-            Vector3Int nextPosition = new Vector3Int(x - 1, y);
+            Vector3Int nextPosition = new Vector3Int(x - 1, y - 1);
             if (board.IsValidPosition(this, nextPosition))
             {
                 x -= 1;
+                y -= 1;
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
 
@@ -54,9 +55,10 @@ public class I : Piece
             }
 
             // If the piece is on the left border
-            nextPosition = new Vector3Int(x, y);
+            nextPosition = new Vector3Int(x, y - 1);
             if (board.IsValidPosition(this, nextPosition))
             {
+                y -= 1;
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
 
@@ -64,10 +66,11 @@ public class I : Piece
             }
 
             // Try one more cell on the left
-            nextPosition = new Vector3Int(x - 2, y);
+            nextPosition = new Vector3Int(x - 2, y - 1);
             if (board.IsValidPosition(this, nextPosition))
             {
                 x -= 2;
+                y -= 1;
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
 
@@ -75,10 +78,11 @@ public class I : Piece
             }
 
             // Try one more cell on the left
-            nextPosition = new Vector3Int(x - 3, y);
+            nextPosition = new Vector3Int(x - 3, y - 1);
             if (board.IsValidPosition(this, nextPosition))
             {
                 x -= 3;
+                y -= 1;
                 rotatePosition = 2;
                 SetTiles(tilemap, tile);
 
@@ -97,16 +101,40 @@ public class I : Piece
             SetCells(1);
 
             Vector3Int nextPosition = new Vector3Int(x + 1, y);
-            if (!board.IsValidPosition(this, nextPosition))
+            if (board.IsValidPosition(this, nextPosition))
             {
-                SetCells(2);
+                x += 1;
+                rotatePosition = 1;
                 SetTiles(tilemap, tile);
 
-                return false;
+                return true;
             }
 
-            x += 1;
-            rotatePosition = 1;
+            nextPosition = new Vector3Int(x + 1, y + 1);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                x += 1;
+                y += 1;
+                rotatePosition = 1;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            nextPosition = new Vector3Int(x + 1, y + 2);
+            if (board.IsValidPosition(this, nextPosition))
+            {
+                x += 1;
+                y += 2;
+                rotatePosition = 1;
+                SetTiles(tilemap, tile);
+
+                return true;
+            }
+
+            // Not the last possibility, because it would give the player a way to make the piece go up
+
+            SetCells(2);
             SetTiles(tilemap, tile);
 
             return true;
