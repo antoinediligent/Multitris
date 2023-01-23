@@ -14,7 +14,8 @@ public class Board : MonoBehaviour
     private float lastUpdate;
     private Piece activePiece;
 
-    private float lastInput;
+    private float lastHInput;
+    private float lastVInput;
 
     int debugCounter = 0;
     bool ok = true;
@@ -80,17 +81,17 @@ public class Board : MonoBehaviour
 
     void Update()
     {
-        if (Time.time > lastInput + 0.2f)
+        if (Time.time > lastHInput + 0.2f)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
                 activePiece.MoveLeft(tilemap);
-                lastInput = Time.time;
+                lastHInput = Time.time;
             }
             else if (Input.GetKey(KeyCode.RightArrow))
             {
                 activePiece.MoveRight(tilemap);
-                lastInput = Time.time;
+                lastHInput = Time.time;
             }
         }
 
@@ -99,11 +100,11 @@ public class Board : MonoBehaviour
             activePiece.Rotate(tilemap);
         }
 
-        if (goingDown && lastUpdate + 0.03f < Time.time)
+        if (goingDown && lastVInput + 0.03f < Time.time)
         {
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                lastUpdate = Time.time;
+                lastVInput = Time.time;
                 ok = activePiece.Down(tilemap);
 
                 if (!ok)
@@ -114,32 +115,28 @@ public class Board : MonoBehaviour
                 }
             }
         }
-        else if (lastUpdate + 0.2f < Time.time)
+        else if (lastVInput + 0.2f < Time.time)
         {
             ok = true;
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                lastUpdate = Time.time;
+                lastVInput = Time.time;
                 ok = activePiece.Down(tilemap);
                 goingDown = true;
             }
 
-            /*ok = activePiece.Down(tilemap);
-            lastUpdate = Time.time;
-
-            // Give the player an opportunity to move his piece just before it's sealed
-            /*if (Input.GetKey(KeyCode.LeftArrow))
+            if (!ok)
             {
-                activePiece.MoveLeft(tilemap);
-                ok = activePiece.Down(tilemap);
-                lastInput = Time.time;
+                activePiece = NewPiece();
+                activePiece.SetTiles(tilemap);
+                goingDown = false;
             }
-            else if (Input.GetKey(KeyCode.RightArrow))
-            {
-                activePiece.MoveRight(tilemap);
-                ok = activePiece.Down(tilemap);
-                lastInput = Time.time;
-            }*/
+        }
+
+        if (Time.time > lastUpdate + 1.0f)
+        {
+            ok = activePiece.Down(tilemap);
+            lastUpdate = Time.time;
 
             if (!ok)
             {
