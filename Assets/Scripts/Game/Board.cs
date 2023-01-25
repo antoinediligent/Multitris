@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 
 public class Board : MonoBehaviour
 {
+    public Camera camera;
     private Vector2Int boardSize;
 
     public Sprite playerOneSprite;
@@ -33,25 +34,39 @@ public class Board : MonoBehaviour
     void Start()
     {
         int numberOfPlayers = StaticClass.NumberOfPlayers;
+        if (numberOfPlayers == 0)
+        {
+            numberOfPlayers = 1;
+        }
         Debug.Log("numberOfPlayers=" + numberOfPlayers);
+
+        boardSize = new Vector2Int(numberOfPlayers * 10, 20);
 
         GameObject background = GameObject.Find("Background");
         SpriteRenderer backgroundSpriteRenderer = background.GetComponent<SpriteRenderer>();
+        backgroundSpriteRenderer.size = new Vector2(numberOfPlayers * 10, 20);
+
         GameObject grid = GameObject.Find("Grid");
 
         if (numberOfPlayers == 1)
         {
-            boardSize = new Vector2Int(10, 20);
-            // background.transform.position.Set(5, 10, 0);
-            backgroundSpriteRenderer.size = new Vector2(10, 20);
             grid.transform.position = new Vector3(5, 0);
+            camera.orthographicSize = 12;
         }
         else if (numberOfPlayers == 2)
         {
-            boardSize = new Vector2Int(20, 20);
-            // background.transform.position.Set(10, 10, 0);
-            backgroundSpriteRenderer.size = new Vector2(20, 20);
             grid.transform.position = new Vector3(0, 0);
+            camera.orthographicSize = 12;
+        }
+        else if (numberOfPlayers == 3)
+        {
+            grid.transform.position = new Vector3(-5, 0);
+            camera.orthographicSize = 14;
+        }
+        else if (numberOfPlayers == 4)
+        {
+            grid.transform.position = new Vector3(-10, 0);
+            camera.orthographicSize = 16;
         }
 
         tilemap = GetComponentInChildren<Tilemap>();
