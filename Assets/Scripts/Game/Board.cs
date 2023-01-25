@@ -1,9 +1,10 @@
+using Menu;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class Board : MonoBehaviour
 {
-    public Vector2Int boardSize = new Vector2Int(10, 20);
+    private Vector2Int boardSize;
 
     public Sprite playerOneSprite;
     public Sprite playerTwoSprite;
@@ -31,6 +32,28 @@ public class Board : MonoBehaviour
 
     void Start()
     {
+        int numberOfPlayers = StaticClass.NumberOfPlayers;
+        Debug.Log("numberOfPlayers=" + numberOfPlayers);
+
+        GameObject background = GameObject.Find("Background");
+        SpriteRenderer backgroundSpriteRenderer = background.GetComponent<SpriteRenderer>();
+        GameObject grid = GameObject.Find("Grid");
+
+        if (numberOfPlayers == 1)
+        {
+            boardSize = new Vector2Int(10, 20);
+            // background.transform.position.Set(5, 10, 0);
+            backgroundSpriteRenderer.size = new Vector2(10, 20);
+            grid.transform.position = new Vector3(5, 0);
+        }
+        else if (numberOfPlayers == 2)
+        {
+            boardSize = new Vector2Int(20, 20);
+            // background.transform.position.Set(10, 10, 0);
+            backgroundSpriteRenderer.size = new Vector2(20, 20);
+            grid.transform.position = new Vector3(0, 0);
+        }
+
         tilemap = GetComponentInChildren<Tilemap>();
 
         activePiece = NewPiece();
