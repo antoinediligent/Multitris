@@ -16,6 +16,9 @@ public class Board : MonoBehaviour
     private float lastUpdate;
     private Piece activePiece;
 
+    private GameObject pauseMenu;
+    private bool isGamePaused = false;
+
     private float lastHInput;
     private float lastVInput;
 
@@ -73,6 +76,13 @@ public class Board : MonoBehaviour
 
         activePiece = NewPiece();
         activePiece.SetTiles(tilemap);
+
+        pauseMenu = GameObject.Find("PauseMenuCanvas");
+        // PauseMenu must be enabled in the editor for the GameObject.Find to work
+        if (pauseMenu.activeSelf)
+        {
+            pauseMenu.SetActive(false);
+        }
     }
 
     Piece NewPiece()
@@ -119,6 +129,27 @@ public class Board : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (pauseMenu != null)
+            {
+                if (pauseMenu.activeSelf)
+                {
+                    pauseMenu.SetActive(false);
+                    isGamePaused = false;
+                }
+                else
+                {
+                    pauseMenu.SetActive(true);
+                    isGamePaused = true;
+                }
+            }
+            else
+            {
+                Debug.Log("pauseMenu == null");
+            }
+        }
+
         if (Time.time > lastHInput + 0.2f)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
