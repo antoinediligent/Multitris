@@ -1,3 +1,4 @@
+using System.Collections;
 using Menu;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -178,6 +179,7 @@ public class Board : MonoBehaviour
 
                 if (!ok)
                 {
+                    CheckLines();
                     activePiece = NewPiece();
                     activePiece.SetTiles(tilemap);
                     goingDown = false;
@@ -196,6 +198,7 @@ public class Board : MonoBehaviour
 
             if (!ok)
             {
+                CheckLines();
                 activePiece = NewPiece();
                 activePiece.SetTiles(tilemap);
                 goingDown = false;
@@ -209,6 +212,7 @@ public class Board : MonoBehaviour
 
             if (!ok)
             {
+                CheckLines();
                 activePiece = NewPiece();
                 activePiece.SetTiles(tilemap);
                 goingDown = false;
@@ -239,5 +243,48 @@ public class Board : MonoBehaviour
         }
 
         return true;
+    }
+
+    /**
+     * Check if one or more lines are finished
+     */
+    public void CheckLines()
+    {
+        ArrayList linesToClear = new ArrayList();
+        for (int i = 0; i < tilemap.size.y - 1; i++)
+        {
+            int nbFilled = 0;
+            for (int j = 0; j < tilemap.size.x; j++)
+            {
+                if (tilemap.HasTile(new Vector3Int(j, i)))
+                {
+                    nbFilled++;
+                }
+            }
+
+            if (nbFilled == tilemap.size.x)
+            {
+                linesToClear.Add(i);
+            }
+        }
+
+        linesToClear.Sort();
+        linesToClear.Reverse();
+
+        if (linesToClear.Count > 1)
+        {
+            Debug.Log("Lines combo of " + linesToClear.Count);
+        }
+
+        foreach (int lineNumber in linesToClear)
+        {
+            for (int i = lineNumber; i < tilemap.size.y - 1; i++)
+            {
+                for (int j = 0; j < tilemap.size.x; j++)
+                {
+                    tilemap.SetTile(new Vector3Int(j, i), tilemap.GetTile(new Vector3Int(j, i+1)));
+                }
+            }
+        }
     }
 }
