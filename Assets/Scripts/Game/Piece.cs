@@ -1,20 +1,8 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum Tetromino
-{
-    I,
-    O,
-    T,
-    S,
-    Z,
-    J,
-    L,
-}
-
 public class Piece
 {
-    protected Tetromino type;
 
     protected int rotatePosition;
     public Vector3Int position { get; set; }
@@ -24,9 +12,8 @@ public class Piece
     public Board board;
     public Vector3Int[] cells { get; protected set; }
 
-    public Piece(Tetromino type, Vector3Int position, Sprite sprite)
+    public Piece(Vector3Int position, Sprite sprite)
     {
-        this.type = type;
         rotatePosition = 1;
         this.position = position;
         tile = Tile.CreateInstance<Tile>();
