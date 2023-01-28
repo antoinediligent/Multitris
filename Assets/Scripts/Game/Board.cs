@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Menu;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -8,14 +9,14 @@ public class Board : MonoBehaviour
     public Camera camera;
     private Vector2Int boardSize;
 
-    public Sprite playerOneSprite;
-    public Sprite playerTwoSprite;
+    private int numberOfPlayers;
+    public List<Player> players = new List<Player>();
+
+    public Sprite[] playerSprites;
 
     private Tilemap tilemap;
-    private Vector3Int spawnSpot = new Vector3Int(4, 19);
 
     private float lastUpdate;
-    private Piece activePiece;
 
     private GameObject pauseMenu;
     private bool isGamePaused = false;
@@ -37,7 +38,7 @@ public class Board : MonoBehaviour
 
     void Start()
     {
-        int numberOfPlayers = StaticClass.NumberOfPlayers;
+        numberOfPlayers = StaticClass.NumberOfPlayers;
         if (numberOfPlayers == 0)
         {
             numberOfPlayers = 1;
@@ -51,6 +52,7 @@ public class Board : MonoBehaviour
         backgroundSpriteRenderer.size = new Vector2(numberOfPlayers * 10, 20);
 
         GameObject grid = GameObject.Find("Grid");
+        tilemap = GetComponentInChildren<Tilemap>();
 
         if (numberOfPlayers == 1)
         {
@@ -73,10 +75,12 @@ public class Board : MonoBehaviour
             camera.orthographicSize = 16;
         }
 
-        tilemap = GetComponentInChildren<Tilemap>();
-
-        activePiece = NewPiece();
-        activePiece.SetTiles(tilemap);
+        for (int i = 1; i <= numberOfPlayers; i++)
+        {
+            Player player = new Player(i, playerSprites[i-1]);
+            player.NewPiece(this, tilemap);
+            players.Add(player);
+        }
 
         pauseMenu = GameObject.Find("PauseMenuCanvas");
         // PauseMenu must be enabled in the editor for the GameObject.Find to work
@@ -84,48 +88,6 @@ public class Board : MonoBehaviour
         {
             pauseMenu.SetActive(false);
         }
-    }
-
-    Piece NewPiece()
-    {
-        int pieceNumber = Random.Range(1, 8);
-
-        Piece piece;
-
-        switch (pieceNumber)
-        {
-            case 1:
-                piece = new I(spawnSpot, playerOneSprite);
-                break;
-
-            case 2:
-                piece = new J(spawnSpot, playerOneSprite);
-                break;
-
-            case 3:
-                piece = new L(spawnSpot, playerOneSprite);
-                break;
-
-            case 4:
-                piece = new O(spawnSpot, playerOneSprite);
-                break;
-
-            case 5:
-                piece = new S(spawnSpot, playerOneSprite);
-                break;
-
-            case 6:
-                piece = new T(spawnSpot, playerOneSprite);
-                break;
-
-            default:
-                piece = new Z(spawnSpot, playerOneSprite);
-                break;
-        }
-
-        piece.board = this;
-
-        return piece;
     }
 
     void Update()
@@ -155,19 +117,19 @@ public class Board : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                activePiece.MoveLeft(tilemap);
+                players[0].piece.MoveLeft(tilemap);
                 lastHInput = Time.time;
             }
             else if (Input.GetKey(KeyCode.RightArrow))
             {
-                activePiece.MoveRight(tilemap);
+                players[0].piece.MoveRight(tilemap);
                 lastHInput = Time.time;
             }
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            activePiece.Rotate(tilemap);
+            players[0].piece.Rotate(tilemap);
         }
 
         if (goingDown && lastVInput + 0.03f < Time.time)
@@ -175,13 +137,12 @@ public class Board : MonoBehaviour
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 lastVInput = Time.time;
-                ok = activePiece.Down(tilemap);
+                ok = players[0].piece.Down(tilemap);
 
                 if (!ok)
                 {
-                    CheckLines();
-                    activePiece = NewPiece();
-                    activePiece.SetTiles(tilemap);
+                    CheckLines(players[0].getPlayerNumber());
+                    players[0].NewPiece(this, tilemap);
                     goingDown = false;
                 }
             }
@@ -192,31 +153,39 @@ public class Board : MonoBehaviour
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 lastVInput = Time.time;
-                ok = activePiece.Down(tilemap);
+                ok = players[0].piece.Down(tilemap);
                 goingDown = true;
             }
 
             if (!ok)
             {
-                CheckLines();
-                activePiece = NewPiece();
-                activePiece.SetTiles(tilemap);
+                CheckLines(players[0].getPlayerNumber());
+                players[0].NewPiece(this, tilemap);
                 goingDown = false;
             }
         }
 
         if (Time.time > lastUpdate + 1.0f)
         {
-            ok = activePiece.Down(tilemap);
-            lastUpdate = Time.time;
-
-            if (!ok)
+            for (int i = 0; i < numberOfPlayers; i++)
             {
-                CheckLines();
-                activePiece = NewPiece();
-                activePiece.SetTiles(tilemap);
-                goingDown = false;
+                if (players[i].piece == null)
+                {
+                    Debug.Log("players[i].piece == null");
+                    Application.Quit();
+                }
+
+                ok = players[i].piece.Down(tilemap);
+
+                if (!ok)
+                {
+                    CheckLines(players[i].getPlayerNumber());
+                    players[i].NewPiece(this, tilemap);
+                    players[i].GoingDown = false;
+                }
             }
+
+            lastUpdate = Time.time;
         }
     }
 
@@ -247,8 +216,10 @@ public class Board : MonoBehaviour
 
     /**
      * Check if one or more lines are finished
+     * trigPlayer = the player who triggered this verification,
+     * needed to avoid a bug when hiding his piece
      */
-    public void CheckLines()
+    public void CheckLines(int trigPlayer)
     {
         ArrayList linesToClear = new ArrayList();
         for (int i = 0; i < tilemap.size.y - 1; i++)
@@ -268,6 +239,11 @@ public class Board : MonoBehaviour
             }
         }
 
+        if (linesToClear.Count == 0)
+        {
+            return;
+        }
+
         linesToClear.Sort();
         linesToClear.Reverse();
 
@@ -276,14 +252,34 @@ public class Board : MonoBehaviour
             Debug.Log("Lines combo of " + linesToClear.Count);
         }
 
+        // Can't hide the triggering player piece, it needs to move with the line
+        for (int i = 0; i < numberOfPlayers; i++)
+        {
+            if (players[i].getPlayerNumber() != trigPlayer)
+            {
+                players[i].HidePiece(tilemap);
+            }
+        }
+
         foreach (int lineNumber in linesToClear)
         {
             for (int i = lineNumber; i < tilemap.size.y - 1; i++)
             {
                 for (int j = 0; j < tilemap.size.x; j++)
                 {
-                    tilemap.SetTile(new Vector3Int(j, i), tilemap.GetTile(new Vector3Int(j, i+1)));
+                    Vector3Int copiedCell = new Vector3Int(j, i + 1);
+                    Vector3Int copyingCell = new Vector3Int(j, i);
+
+                    tilemap.SetTile(copyingCell, tilemap.GetTile(copiedCell));
                 }
+            }
+        }
+
+        for (int i = 0; i < numberOfPlayers; i++)
+        {
+            if (players[i].getPlayerNumber() != trigPlayer)
+            {
+                players[i].ShowPiece(tilemap);
             }
         }
     }

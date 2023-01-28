@@ -257,8 +257,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 519420031}
-  playerOneSprite: {fileID: 21300000, guid: 222419eb7ae4720429c65051ceca4d91, type: 3}
-  playerTwoSprite: {fileID: 21300000, guid: 689357ea57ba35d4a9f41a7043a5dcef, type: 3}
+  playerSprites:
+  - {fileID: 21300000, guid: 222419eb7ae4720429c65051ceca4d91, type: 3}
+  - {fileID: 21300000, guid: 689357ea57ba35d4a9f41a7043a5dcef, type: 3}
+  - {fileID: 21300000, guid: 570045fade0d32e43bc957ba7cf8f9b3, type: 3}
+  - {fileID: 21300000, guid: 113cf5aadf3a85d46af7572bb8df30c8, type: 3}
 --- !u!1 &278913187
 GameObject:
   m_ObjectHideFlags: 0
