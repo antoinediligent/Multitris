@@ -9,9 +9,9 @@ public class Player
     public Piece piece;
 
     // Move variables
-    private bool lastDirInputTime;
+    public float lastDirInputTime;
     public int movingDirection;
-    private bool superMove;
+    public bool superMove;
 
     public const int NOT_MOVING = 0;
     public const int MOVING_LEFT = 1;

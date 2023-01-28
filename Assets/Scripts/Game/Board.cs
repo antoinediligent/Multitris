@@ -32,11 +32,6 @@ public class Board : MonoBehaviour
     bool ok = true;
     private bool goingDown;
 
-    // TODO : dev thing
-    private bool player2MovingRight;
-    private float player2RightTime;
-    private bool player2SuperMoveRight;
-
     public RectInt Bounds {
         get
         {
@@ -51,30 +46,41 @@ public class Board : MonoBehaviour
 
         controls.Gameplay.MoveUp.performed += ctx => players[1].piece.Rotate(tilemap);
 
-        controls.Gameplay.MoveLeft.performed += ctx => MoveLeft();
+        controls.Gameplay.MoveLeft.started += ctx => StartMoveLeft();
+        controls.Gameplay.MoveLeft.canceled += ctx => StopMove();
 
         controls.Gameplay.MoveRight.started += ctx => StartMoveRight();
-        controls.Gameplay.MoveRight.canceled += ctx => StopMoveRight();
+        controls.Gameplay.MoveRight.canceled += ctx => StopMove();
 
-        controls.Gameplay.MoveDown.performed += ctx => players[1].piece.Down(tilemap);
+        controls.Gameplay.MoveDown.started += ctx => StartMoveDown();
+        controls.Gameplay.MoveDown.canceled += ctx => StopMove();
+    }
+
+    void StartMoveLeft()
+    {
+        players[1].movingDirection = Player.MOVING_LEFT;
+        players[1].piece.MoveLeft(tilemap);
+        players[1].lastDirInputTime = Time.time;
     }
 
     void StartMoveRight()
     {
-        player2MovingRight = true;
+        players[1].movingDirection = Player.MOVING_RIGHT;
         players[1].piece.MoveRight(tilemap);
-        player2RightTime = Time.time;
+        players[1].lastDirInputTime = Time.time;
     }
 
-    void StopMoveRight()
+    void StartMoveDown()
     {
-        player2MovingRight = false;
-        player2SuperMoveRight = false;
+        players[1].movingDirection = Player.MOVING_DOWN;
+        players[1].piece.Down(tilemap);
+        players[1].lastDirInputTime = Time.time;
     }
 
-    void MoveLeft()
+    void StopMove()
     {
-        players[1].piece.MoveLeft(tilemap);
+        players[1].movingDirection = Player.NOT_MOVING;
+        players[1].superMove = false;
     }
 
     private void OnEnable()
@@ -166,18 +172,18 @@ public class Board : MonoBehaviour
         }
         // End Pause Menu
 
-        if (player2MovingRight)
+        if (players[1].movingDirection != Player.NOT_MOVING)
         {
-            if (Time.time > player2RightTime + 0.2f)
+            if (Time.time > players[1].lastDirInputTime + 0.2f)
             {
-                players[1].piece.MoveRight(tilemap);
-                player2RightTime = Time.time;
-                player2SuperMoveRight = true;
+                MovePlayer(1);
+                players[1].lastDirInputTime = Time.time;
+                players[1].superMove = true;
             }
-            else if (player2SuperMoveRight && Time.time > player2RightTime + 0.03f)
+            else if (players[1].superMove && Time.time > players[1].lastDirInputTime + 0.03f)
             {
-                players[1].piece.MoveRight(tilemap);
-                player2RightTime = Time.time;
+                MovePlayer(1);
+                players[1].lastDirInputTime = Time.time;
             }
         }
 
@@ -254,6 +260,22 @@ public class Board : MonoBehaviour
             }
 
             lastDownUpdate = Time.time;
+        }
+    }
+
+    void MovePlayer(int playerNumber)
+    {
+        if (players[playerNumber].movingDirection == Player.MOVING_LEFT)
+        {
+            players[playerNumber].piece.MoveLeft(tilemap);
+        }
+        else if (players[playerNumber].movingDirection == Player.MOVING_RIGHT)
+        {
+            players[playerNumber].piece.MoveRight(tilemap);
+        }
+        else if (players[playerNumber].movingDirection == Player.MOVING_DOWN)
+        {
+            players[playerNumber].piece.Down(tilemap);
         }
     }
 
