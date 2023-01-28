@@ -8,7 +8,15 @@ public class Player
     public Vector3Int spawnSpot;
     public Piece piece;
 
-    public bool GoingDown;
+    // Move variables
+    private bool lastDirInputTime;
+    public int movingDirection;
+    private bool superMove;
+
+    public const int NOT_MOVING = 0;
+    public const int MOVING_LEFT = 1;
+    public const int MOVING_RIGHT = 2;
+    public const int MOVING_DOWN = 3;
 
     public Player(int number, Sprite sprite)
     {
@@ -32,7 +40,7 @@ public class Player
         }
     }
 
-    public Piece NewPiece(Board board, Tilemap tilemap)
+    public void NewPiece(Board board, Tilemap tilemap)
     {
         int pieceNumber = Random.Range(1, 8);
 
@@ -69,11 +77,9 @@ public class Player
 
         piece.board = board;
         piece.SetTiles(tilemap);
-
-        return piece;
     }
 
-    public int getPlayerNumber()
+    public int GetPlayerNumber()
     {
         return number;
     }

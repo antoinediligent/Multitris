@@ -16,17 +16,26 @@ public class Board : MonoBehaviour
 
     private Tilemap tilemap;
 
-    private float lastUpdate;
+    // Game push the piece down
+    private float lastDownUpdate;
 
     private GameObject pauseMenu;
     private bool isGamePaused = false;
 
+    private PlayerControls controls;
+
+    // TODO : player 1 keyboard stuff
     private float lastHInput;
     private float lastVInput;
 
     int debugCounter = 0;
     bool ok = true;
-    private bool goingDown = false;
+    private bool goingDown;
+
+    // TODO : dev thing
+    private bool player2MovingRight;
+    private float player2RightTime;
+    private bool player2SuperMoveRight;
 
     public RectInt Bounds {
         get
@@ -34,6 +43,48 @@ public class Board : MonoBehaviour
             Vector2Int position = new Vector2Int(0, 0);
             return new RectInt(position, boardSize);
         }
+    }
+
+    private void Awake()
+    {
+        controls = new PlayerControls();
+
+        controls.Gameplay.MoveUp.performed += ctx => players[1].piece.Rotate(tilemap);
+
+        controls.Gameplay.MoveLeft.performed += ctx => MoveLeft();
+
+        controls.Gameplay.MoveRight.started += ctx => StartMoveRight();
+        controls.Gameplay.MoveRight.canceled += ctx => StopMoveRight();
+
+        controls.Gameplay.MoveDown.performed += ctx => players[1].piece.Down(tilemap);
+    }
+
+    void StartMoveRight()
+    {
+        player2MovingRight = true;
+        players[1].piece.MoveRight(tilemap);
+        player2RightTime = Time.time;
+    }
+
+    void StopMoveRight()
+    {
+        player2MovingRight = false;
+        player2SuperMoveRight = false;
+    }
+
+    void MoveLeft()
+    {
+        players[1].piece.MoveLeft(tilemap);
+    }
+
+    private void OnEnable()
+    {
+        controls.Gameplay.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Gameplay.Disable();
     }
 
     void Start()
@@ -92,6 +143,7 @@ public class Board : MonoBehaviour
 
     void Update()
     {
+        // Pause Menu
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (pauseMenu != null)
@@ -110,6 +162,22 @@ public class Board : MonoBehaviour
             else
             {
                 Debug.Log("pauseMenu == null");
+            }
+        }
+        // End Pause Menu
+
+        if (player2MovingRight)
+        {
+            if (Time.time > player2RightTime + 0.2f)
+            {
+                players[1].piece.MoveRight(tilemap);
+                player2RightTime = Time.time;
+                player2SuperMoveRight = true;
+            }
+            else if (player2SuperMoveRight && Time.time > player2RightTime + 0.03f)
+            {
+                players[1].piece.MoveRight(tilemap);
+                player2RightTime = Time.time;
             }
         }
 
@@ -141,7 +209,7 @@ public class Board : MonoBehaviour
 
                 if (!ok)
                 {
-                    CheckLines(players[0].getPlayerNumber());
+                    CheckLines(players[0].GetPlayerNumber());
                     players[0].NewPiece(this, tilemap);
                     goingDown = false;
                 }
@@ -159,13 +227,13 @@ public class Board : MonoBehaviour
 
             if (!ok)
             {
-                CheckLines(players[0].getPlayerNumber());
+                CheckLines(players[0].GetPlayerNumber());
                 players[0].NewPiece(this, tilemap);
                 goingDown = false;
             }
         }
 
-        if (Time.time > lastUpdate + 1.0f)
+        if (Time.time > lastDownUpdate + 1.0f)
         {
             for (int i = 0; i < numberOfPlayers; i++)
             {
@@ -179,13 +247,13 @@ public class Board : MonoBehaviour
 
                 if (!ok)
                 {
-                    CheckLines(players[i].getPlayerNumber());
+                    CheckLines(players[i].GetPlayerNumber());
                     players[i].NewPiece(this, tilemap);
-                    players[i].GoingDown = false;
+                    players[i].movingDirection = Player.NOT_MOVING;
                 }
             }
 
-            lastUpdate = Time.time;
+            lastDownUpdate = Time.time;
         }
     }
 
@@ -255,7 +323,7 @@ public class Board : MonoBehaviour
         // Can't hide the triggering player piece, it needs to move with the line
         for (int i = 0; i < numberOfPlayers; i++)
         {
-            if (players[i].getPlayerNumber() != trigPlayer)
+            if (players[i].GetPlayerNumber() != trigPlayer)
             {
                 players[i].HidePiece(tilemap);
             }
@@ -277,7 +345,7 @@ public class Board : MonoBehaviour
 
         for (int i = 0; i < numberOfPlayers; i++)
         {
-            if (players[i].getPlayerNumber() != trigPlayer)
+            if (players[i].GetPlayerNumber() != trigPlayer)
             {
                 players[i].ShowPiece(tilemap);
             }
