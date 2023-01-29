@@ -49,7 +49,7 @@ public class I : Piece
 
             foreach (Vector3Int nextPosition in nextPositions)
             {
-                if (board.IsValidPosition(this, nextPosition))
+                if (board.IsValidPosition(this, nextPosition) == NO_COLLISION)
                 {
                     position = nextPosition;
                     rotatePosition = 2;
@@ -77,7 +77,7 @@ public class I : Piece
 
             foreach (Vector3Int nextPosition in nextPositions)
             {
-                if (board.IsValidPosition(this, nextPosition))
+                if (board.IsValidPosition(this, nextPosition) == NO_COLLISION)
                 {
                     position = nextPosition;
                     rotatePosition = 1;

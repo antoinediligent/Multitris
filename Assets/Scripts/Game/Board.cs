@@ -28,8 +28,6 @@ public class Board : MonoBehaviour
     private float lastHInput;
     private float lastVInput;
 
-    int debugCounter = 0;
-    bool ok = true;
     private bool goingDown;
 
     public RectInt Bounds {
@@ -172,7 +170,8 @@ public class Board : MonoBehaviour
         }
         // End Pause Menu
 
-        if (players[1].movingDirection != Player.NOT_MOVING)
+        // Gamepad controls
+        if (numberOfPlayers > 1 && players[1].movingDirection != Player.NOT_MOVING)
         {
             if (Time.time > players[1].lastDirInputTime + 0.2f)
             {
@@ -186,6 +185,7 @@ public class Board : MonoBehaviour
                 players[1].lastDirInputTime = Time.time;
             }
         }
+        // End Gamepad controls
 
         if (Time.time > lastHInput + 0.2f)
         {
@@ -211,9 +211,9 @@ public class Board : MonoBehaviour
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 lastVInput = Time.time;
-                ok = players[0].piece.Down(tilemap);
+                int collisionResult = players[0].piece.Down(tilemap);
 
-                if (!ok)
+                if (collisionResult == Piece.BOARD_COLLISION)
                 {
                     CheckLines(players[0].GetPlayerNumber());
                     players[0].NewPiece(this, tilemap);
@@ -223,15 +223,15 @@ public class Board : MonoBehaviour
         }
         else if (lastVInput + 0.2f < Time.time)
         {
-            ok = true;
+            int collisionResult = 0;
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 lastVInput = Time.time;
-                ok = players[0].piece.Down(tilemap);
+                collisionResult = players[0].piece.Down(tilemap);
                 goingDown = true;
             }
 
-            if (!ok)
+            if (collisionResult == Piece.BOARD_COLLISION)
             {
                 CheckLines(players[0].GetPlayerNumber());
                 players[0].NewPiece(this, tilemap);
@@ -249,9 +249,8 @@ public class Board : MonoBehaviour
                     Application.Quit();
                 }
 
-                ok = players[i].piece.Down(tilemap);
-
-                if (!ok)
+                int collisionResult = players[i].piece.Down(tilemap);
+                if (collisionResult == Piece.BOARD_COLLISION)
                 {
                     CheckLines(players[i].GetPlayerNumber());
                     players[i].NewPiece(this, tilemap);
@@ -275,11 +274,17 @@ public class Board : MonoBehaviour
         }
         else if (players[playerNumber].movingDirection == Player.MOVING_DOWN)
         {
-            players[playerNumber].piece.Down(tilemap);
+            int collisionResult = players[playerNumber].piece.Down(tilemap);
+            if (collisionResult == Piece.BOARD_COLLISION)
+            {
+                CheckLines(players[playerNumber].GetPlayerNumber());
+                players[playerNumber].NewPiece(this, tilemap);
+                players[playerNumber].movingDirection = Player.NOT_MOVING;
+            }
         }
     }
 
-    public bool IsValidPosition(Piece piece, Vector3Int position)
+    public int IsValidPosition(Piece piece, Vector3Int position)
     {
         RectInt bounds = Bounds;
 
@@ -291,17 +296,23 @@ public class Board : MonoBehaviour
             // An out of bounds tile is invalid
             if (!bounds.Contains((Vector2Int)tilePosition)) {
                 Debug.Log("IsValidPosition false bounds " + tilePosition);
-                return false;
+                return Piece.BOARD_COLLISION;
             }
 
             // A tile already occupies the position, thus invalid
             if (tilemap.HasTile(tilePosition)) {
-                Debug.Log("IsValidPosition false HasTile");
-                return false;
+
+                GameTile gameTile = (GameTile) tilemap.GetTile(tilePosition);
+                if (gameTile.gameTag.Equals(GameTile.ACTIVE_PIECE))
+                {
+                    return Piece.OTHER_PLAYER_COLLISION;
+                }
+
+                return Piece.BOARD_COLLISION;
             }
         }
 
-        return true;
+        return Piece.NO_COLLISION;
     }
 
     /**

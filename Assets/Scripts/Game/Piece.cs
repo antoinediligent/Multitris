@@ -7,16 +7,20 @@ public class Piece
     protected int rotatePosition;
     public Vector3Int position { get; set; }
 
-    protected Tile tile;
+    protected GameTile tile;
 
     public Board board;
     public Vector3Int[] cells { get; protected set; }
+
+    public const int NO_COLLISION = 0;
+    public const int BOARD_COLLISION = 1;
+    public const int OTHER_PLAYER_COLLISION = 2;
 
     public Piece(Vector3Int position, Sprite sprite)
     {
         rotatePosition = 1;
         this.position = position;
-        tile = Tile.CreateInstance<Tile>();
+        tile = GameTile.CreateInstance<GameTile>();
         tile.sprite = sprite;
 
         cells = new Vector3Int[4];
@@ -41,22 +45,28 @@ public class Piece
         SetTiles(tilemap, tile);
     }
 
-    public bool Down(Tilemap tilemap)
+    public int Down(Tilemap tilemap)
     {
         SetTiles(tilemap, null);
 
         Vector3Int nextPosition = position + Vector3Int.down;
-        if (board.IsValidPosition(this, nextPosition))
+        int isValidState = board.IsValidPosition(this, nextPosition);
+        if (isValidState == NO_COLLISION)
         {
             position = nextPosition;
             SetTiles(tilemap, tile);
 
-            return true;
+            return NO_COLLISION;
+        }
+
+        if (isValidState == BOARD_COLLISION)
+        {
+            tile.gameTag = GameTile.BOARD_PIECE;
         }
 
         SetTiles(tilemap, tile);
 
-        return false;
+        return isValidState;
     }
 
     public bool MoveLeft(Tilemap tilemap)
@@ -64,7 +74,7 @@ public class Piece
         SetTiles(tilemap, null);
 
         Vector3Int nextPosition = position + Vector3Int.left;
-        if (board.IsValidPosition(this, nextPosition))
+        if (board.IsValidPosition(this, nextPosition) == NO_COLLISION)
         {
             position = nextPosition;
             SetTiles(tilemap, tile);
@@ -82,7 +92,7 @@ public class Piece
         SetTiles(tilemap, null);
 
         Vector3Int nextPosition = position + Vector3Int.right;
-        if (board.IsValidPosition(this, nextPosition))
+        if (board.IsValidPosition(this, nextPosition) == NO_COLLISION)
         {
             position = nextPosition;
             SetTiles(tilemap, tile);

@@ -49,7 +49,7 @@ public class L : Piece
 
             foreach (Vector3Int nextPosition in nextPositions)
             {
-                if (board.IsValidPosition(this, nextPosition))
+                if (board.IsValidPosition(this, nextPosition) == NO_COLLISION)
                 {
                     position = nextPosition;
                     rotatePosition = 2;
@@ -71,7 +71,7 @@ public class L : Piece
             SetCells(3);
 
             Vector3Int nextPosition = position + new Vector3Int(1, 0);
-            if (board.IsValidPosition(this, nextPosition))
+            if (board.IsValidPosition(this, nextPosition) == NO_COLLISION)
             {
                 position = nextPosition;
                 rotatePosition = 3;
@@ -98,7 +98,7 @@ public class L : Piece
 
             foreach (Vector3Int nextPosition in nextPositions)
             {
-                if (board.IsValidPosition(this, nextPosition))
+                if (board.IsValidPosition(this, nextPosition) == NO_COLLISION)
                 {
                     position = nextPosition;
                     rotatePosition = 4;
@@ -125,7 +125,7 @@ public class L : Piece
 
             foreach (Vector3Int nextPosition in nextPositions)
             {
-                if (board.IsValidPosition(this, nextPosition))
+                if (board.IsValidPosition(this, nextPosition) == NO_COLLISION)
                 {
                     position = nextPosition;
                     rotatePosition = 1;
