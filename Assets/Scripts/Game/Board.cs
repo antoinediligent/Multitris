@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using Menu;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using TMPro;
 
 public class Board : MonoBehaviour
 {
@@ -22,6 +24,8 @@ public class Board : MonoBehaviour
     private GameObject pauseMenu;
     private bool isGamePaused = false;
 
+    private ScoreCalculator scoreCalculator;
+
     private PlayerControls controls;
 
     // TODO : player 1 keyboard stuff
@@ -30,7 +34,7 @@ public class Board : MonoBehaviour
 
     private bool goingDown;
 
-    public RectInt Bounds {
+    private RectInt Bounds {
         get
         {
             Vector2Int position = new Vector2Int(0, 0);
@@ -109,10 +113,33 @@ public class Board : MonoBehaviour
         GameObject grid = GameObject.Find("Grid");
         tilemap = GetComponentInChildren<Tilemap>();
 
+        GameObject levelLabel = GameObject.Find("LevelLabel");
+        GameObject levelTextContainer = GameObject.Find("Level");
+        TMP_Text levelText = levelTextContainer.GetComponent<TMP_Text>();
+
+        GameObject scoreLabel = GameObject.Find("ScoreLabel");
+        GameObject scoreTextContainer = GameObject.Find("Score");
+        TMP_Text scoreText = scoreTextContainer.GetComponent<TMP_Text>();
+
+        GameObject lineLabel = GameObject.Find("LineLabel");
+        GameObject lineTextContainer = GameObject.Find("Line");
+        TMP_Text lineText = lineTextContainer.GetComponent<TMP_Text>();
+
+        scoreCalculator = new ScoreCalculator(levelText, scoreText, lineText);
+
         if (numberOfPlayers == 1)
         {
             grid.transform.position = new Vector3(5, 0);
             camera.orthographicSize = 12;
+
+            levelLabel.transform.position = new Vector3(22, 19);
+            levelTextContainer.transform.position = new Vector3(22, 17);
+
+            scoreLabel.transform.position = new Vector3(22, 14);
+            scoreTextContainer.transform.position = new Vector3(22, 12);
+
+            lineLabel.transform.position = new Vector3(22, 9);
+            lineTextContainer.transform.position = new Vector3(22, 7);
         }
         else if (numberOfPlayers == 2)
         {
@@ -123,11 +150,29 @@ public class Board : MonoBehaviour
         {
             grid.transform.position = new Vector3(-5, 0);
             camera.orthographicSize = 14;
+
+            levelLabel.transform.position = new Vector3(31, 19);
+            levelTextContainer.transform.position = new Vector3(31, 17);
+
+            scoreLabel.transform.position = new Vector3(31, 14);
+            scoreTextContainer.transform.position = new Vector3(31, 12);
+
+            lineLabel.transform.position = new Vector3(31, 9);
+            lineTextContainer.transform.position = new Vector3(31, 7);
         }
         else if (numberOfPlayers == 4)
         {
             grid.transform.position = new Vector3(-10, 0);
             camera.orthographicSize = 16;
+
+            levelLabel.transform.position = new Vector3(36, 19);
+            levelTextContainer.transform.position = new Vector3(36, 17);
+
+            scoreLabel.transform.position = new Vector3(36, 14);
+            scoreTextContainer.transform.position = new Vector3(36, 12);
+
+            lineLabel.transform.position = new Vector3(36, 9);
+            lineTextContainer.transform.position = new Vector3(36, 7);
         }
 
         for (int i = 1; i <= numberOfPlayers; i++)
@@ -322,7 +367,7 @@ public class Board : MonoBehaviour
      */
     public void CheckLines(int trigPlayer)
     {
-        ArrayList linesToClear = new ArrayList();
+        ArrayList linesToClear = new ArrayList(4);
         for (int i = 0; i < tilemap.size.y - 1; i++)
         {
             int nbFilled = 0;
@@ -348,10 +393,7 @@ public class Board : MonoBehaviour
         linesToClear.Sort();
         linesToClear.Reverse();
 
-        if (linesToClear.Count > 1)
-        {
-            Debug.Log("Lines combo of " + linesToClear.Count);
-        }
+        scoreCalculator.LineFinished(trigPlayer, linesToClear.Count);
 
         // Can't hide the triggering player piece, it needs to move with the line
         for (int i = 0; i < numberOfPlayers; i++)
