@@ -132,14 +132,15 @@ public class Board : MonoBehaviour
             grid.transform.position = new Vector3(5, 0);
             camera.orthographicSize = 12;
 
-            levelLabel.transform.position = new Vector3(22, 19);
-            levelTextContainer.transform.position = new Vector3(22, 17);
+            int onePlayerAlignX = 22;
+            levelLabel.transform.position = new Vector3(onePlayerAlignX, 19);
+            levelTextContainer.transform.position = new Vector3(onePlayerAlignX, 17);
 
-            scoreLabel.transform.position = new Vector3(22, 14);
-            scoreTextContainer.transform.position = new Vector3(22, 12);
+            scoreLabel.transform.position = new Vector3(onePlayerAlignX, 14);
+            scoreTextContainer.transform.position = new Vector3(onePlayerAlignX, 12);
 
-            lineLabel.transform.position = new Vector3(22, 9);
-            lineTextContainer.transform.position = new Vector3(22, 7);
+            lineLabel.transform.position = new Vector3(onePlayerAlignX, 9);
+            lineTextContainer.transform.position = new Vector3(onePlayerAlignX, 7);
         }
         else if (numberOfPlayers == 2)
         {
@@ -151,28 +152,30 @@ public class Board : MonoBehaviour
             grid.transform.position = new Vector3(-5, 0);
             camera.orthographicSize = 14;
 
-            levelLabel.transform.position = new Vector3(31, 19);
-            levelTextContainer.transform.position = new Vector3(31, 17);
+            int threePlayerAlignX = 31;
+            levelLabel.transform.position = new Vector3(threePlayerAlignX, 19);
+            levelTextContainer.transform.position = new Vector3(threePlayerAlignX, 17);
 
-            scoreLabel.transform.position = new Vector3(31, 14);
-            scoreTextContainer.transform.position = new Vector3(31, 12);
+            scoreLabel.transform.position = new Vector3(threePlayerAlignX, 14);
+            scoreTextContainer.transform.position = new Vector3(threePlayerAlignX, 12);
 
-            lineLabel.transform.position = new Vector3(31, 9);
-            lineTextContainer.transform.position = new Vector3(31, 7);
+            lineLabel.transform.position = new Vector3(threePlayerAlignX, 9);
+            lineTextContainer.transform.position = new Vector3(threePlayerAlignX, 7);
         }
         else if (numberOfPlayers == 4)
         {
             grid.transform.position = new Vector3(-10, 0);
             camera.orthographicSize = 16;
 
-            levelLabel.transform.position = new Vector3(36, 19);
-            levelTextContainer.transform.position = new Vector3(36, 17);
+            int fourPlayerAlignX = 36;
+            levelLabel.transform.position = new Vector3(fourPlayerAlignX, 19);
+            levelTextContainer.transform.position = new Vector3(fourPlayerAlignX, 17);
 
-            scoreLabel.transform.position = new Vector3(36, 14);
-            scoreTextContainer.transform.position = new Vector3(36, 12);
+            scoreLabel.transform.position = new Vector3(fourPlayerAlignX, 14);
+            scoreTextContainer.transform.position = new Vector3(fourPlayerAlignX, 12);
 
-            lineLabel.transform.position = new Vector3(36, 9);
-            lineTextContainer.transform.position = new Vector3(36, 7);
+            lineLabel.transform.position = new Vector3(fourPlayerAlignX, 9);
+            lineTextContainer.transform.position = new Vector3(fourPlayerAlignX, 7);
         }
 
         for (int i = 1; i <= numberOfPlayers; i++)
