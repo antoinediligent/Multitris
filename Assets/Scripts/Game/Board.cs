@@ -37,6 +37,7 @@ public class Board : MonoBehaviour
     private bool goingDown;
 
     private GameObject gameOverMenu;
+    private GameObject scoreScreenCanvas;
 
     private RectInt Bounds {
         get
@@ -200,6 +201,12 @@ public class Board : MonoBehaviour
         if (gameOverMenu.activeSelf)
         {
             gameOverMenu.SetActive(false);
+        }
+
+        scoreScreenCanvas = GameObject.Find("ScoreScreenCanvas");
+        if (scoreScreenCanvas.activeSelf)
+        {
+            scoreScreenCanvas.SetActive(false);
         }
 
         gameBeginning = Time.time;
