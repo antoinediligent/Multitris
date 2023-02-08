@@ -350,8 +350,11 @@ public class Board : MonoBehaviour
 
         // Calculate current level
         // Start at level one
-        float currentLevel = ((Time.time - gameBeginning) / 30) + 1;
-        scoreCalculator.SetLevel((int) Math.Round(currentLevel));
+        if (!isGamePaused)
+        {
+            float currentLevel = ((Time.time - gameBeginning) / 30) + 1;
+            scoreCalculator.SetLevel((int)Math.Round(currentLevel));
+        }
     }
 
     public void OutOfPause()
