@@ -199,8 +199,7 @@ public class Board : MonoBehaviour
             {
                 if (pauseMenu.activeSelf)
                 {
-                    pauseMenu.SetActive(false);
-                    isGamePaused = false;
+                    OutOfPause();
                 }
                 else
                 {
@@ -216,7 +215,7 @@ public class Board : MonoBehaviour
         // End Pause Menu
 
         // Gamepad controls
-        if (numberOfPlayers > 1 && players[1].movingDirection != Player.NOT_MOVING)
+        if (!isGamePaused && numberOfPlayers > 1 && players[1].movingDirection != Player.NOT_MOVING)
         {
             if (Time.time > players[1].lastDirInputTime + 0.2f)
             {
@@ -232,7 +231,7 @@ public class Board : MonoBehaviour
         }
         // End Gamepad controls
 
-        if (Time.time > lastHInput + 0.2f)
+        if (!isGamePaused && Time.time > lastHInput + 0.2f)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
@@ -246,12 +245,12 @@ public class Board : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (!isGamePaused && Input.GetKeyDown(KeyCode.UpArrow))
         {
             players[0].piece.Rotate(tilemap);
         }
 
-        if (goingDown && lastVInput + 0.03f < Time.time)
+        if (!isGamePaused && goingDown && lastVInput + 0.03f < Time.time)
         {
             if (Input.GetKey(KeyCode.DownArrow))
             {
@@ -266,7 +265,7 @@ public class Board : MonoBehaviour
                 }
             }
         }
-        else if (lastVInput + 0.2f < Time.time)
+        else if (!isGamePaused && lastVInput + 0.2f < Time.time)
         {
             int collisionResult = 0;
             if (Input.GetKey(KeyCode.DownArrow))
@@ -284,7 +283,7 @@ public class Board : MonoBehaviour
             }
         }
 
-        if (Time.time > lastDownUpdate + 1.0f)
+        if (!isGamePaused && Time.time > lastDownUpdate + 1.0f)
         {
             for (int i = 0; i < numberOfPlayers; i++)
             {
@@ -305,6 +304,12 @@ public class Board : MonoBehaviour
 
             lastDownUpdate = Time.time;
         }
+    }
+
+    public void OutOfPause()
+    {
+        pauseMenu.SetActive(false);
+        isGamePaused = false;
     }
 
     void MovePlayer(int playerNumber)
