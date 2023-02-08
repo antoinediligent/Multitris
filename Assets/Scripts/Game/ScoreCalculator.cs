@@ -45,5 +45,16 @@ namespace Game
             scoreText.text = score.ToString();
             lineText.text = lines.ToString();
         }
+
+        public int GetLevel()
+        {
+            return level;
+        }
+
+        public void SetLevel(int newLevel)
+        {
+            level = newLevel;
+            levelText.text = level.ToString();
+        }
     }
 }

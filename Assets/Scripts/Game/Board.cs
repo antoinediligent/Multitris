@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game;
@@ -25,6 +26,7 @@ public class Board : MonoBehaviour
     private bool isGamePaused = false;
 
     private ScoreCalculator scoreCalculator;
+    private float gameBeginning;
 
     private PlayerControls controls;
 
@@ -191,6 +193,8 @@ public class Board : MonoBehaviour
         {
             pauseMenu.SetActive(false);
         }
+
+        gameBeginning = Time.time;
     }
 
     void Update()
@@ -286,7 +290,7 @@ public class Board : MonoBehaviour
             }
         }
 
-        if (!isGamePaused && Time.time > lastDownUpdate + 1.0f)
+        if (!isGamePaused && Time.time > lastDownUpdate + (1.0f - scoreCalculator.GetLevel() * 0.05))
         {
             for (int i = 0; i < numberOfPlayers; i++)
             {
@@ -307,6 +311,11 @@ public class Board : MonoBehaviour
 
             lastDownUpdate = Time.time;
         }
+
+        // Calculate current level
+        // Start at level one
+        float currentLevel = ((Time.time - gameBeginning) / 30) + 1;
+        scoreCalculator.SetLevel((int) Math.Round(currentLevel));
     }
 
     public void OutOfPause()
