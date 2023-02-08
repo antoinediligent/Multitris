@@ -36,6 +36,8 @@ public class Board : MonoBehaviour
 
     private bool goingDown;
 
+    private GameObject gameOverMenu;
+
     private RectInt Bounds {
         get
         {
@@ -194,6 +196,12 @@ public class Board : MonoBehaviour
             pauseMenu.SetActive(false);
         }
 
+        gameOverMenu = GameObject.Find("GameOverMenuCanvas");
+        if (gameOverMenu.activeSelf)
+        {
+            gameOverMenu.SetActive(false);
+        }
+
         gameBeginning = Time.time;
     }
 
@@ -267,8 +275,15 @@ public class Board : MonoBehaviour
                 if (collisionResult == Piece.BOARD_COLLISION)
                 {
                     CheckLines(players[0].GetPlayerNumber());
-                    players[0].NewPiece(this, tilemap);
-                    goingDown = false;
+                    if (!IsGameOver())
+                    {
+                        players[0].NewPiece(this, tilemap);
+                        goingDown = false;
+                    }
+                    else
+                    {
+                        GameOver();
+                    }
                 }
             }
         }
@@ -285,8 +300,15 @@ public class Board : MonoBehaviour
             if (collisionResult == Piece.BOARD_COLLISION)
             {
                 CheckLines(players[0].GetPlayerNumber());
-                players[0].NewPiece(this, tilemap);
-                goingDown = false;
+                if (!IsGameOver())
+                {
+                    players[0].NewPiece(this, tilemap);
+                    goingDown = false;
+                }
+                else
+                {
+                    GameOver();
+                }
             }
         }
 
@@ -304,8 +326,15 @@ public class Board : MonoBehaviour
                 if (collisionResult == Piece.BOARD_COLLISION)
                 {
                     CheckLines(players[i].GetPlayerNumber());
-                    players[i].NewPiece(this, tilemap);
-                    players[i].movingDirection = Player.NOT_MOVING;
+                    if (!IsGameOver())
+                    {
+                        players[i].NewPiece(this, tilemap);
+                        players[i].movingDirection = Player.NOT_MOVING;
+                    }
+                    else
+                    {
+                        GameOver();
+                    }
                 }
             }
 
@@ -340,8 +369,15 @@ public class Board : MonoBehaviour
             if (collisionResult == Piece.BOARD_COLLISION)
             {
                 CheckLines(players[playerNumber].GetPlayerNumber());
-                players[playerNumber].NewPiece(this, tilemap);
-                players[playerNumber].movingDirection = Player.NOT_MOVING;
+                if (!IsGameOver())
+                {
+                    players[playerNumber].NewPiece(this, tilemap);
+                    players[playerNumber].movingDirection = Player.NOT_MOVING;
+                }
+                else
+                {
+                    GameOver();
+                }
             }
         }
     }
@@ -442,5 +478,31 @@ public class Board : MonoBehaviour
                 players[i].ShowPiece(tilemap);
             }
         }
+    }
+
+    bool IsGameOver()
+    {
+        for (int i = 0; i < tilemap.size.x; i++)
+        {
+            int secondToLastLine = boardSize.y - 1;
+            Vector3Int tilePosition = new Vector3Int(i, secondToLastLine);
+            if (tilemap.HasTile(tilePosition))
+            {
+                GameTile gameTile = (GameTile) tilemap.GetTile(tilePosition);
+                if (!gameTile.gameTag.Equals(GameTile.ACTIVE_PIECE))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // When game is over, pause the game and display a menu
+    void GameOver()
+    {
+        isGamePaused = true;
+        gameOverMenu.SetActive(true);
     }
 }
