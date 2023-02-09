@@ -38,6 +38,7 @@ public class Board : MonoBehaviour
 
     private GameObject gameOverMenu;
     private GameObject scoreScreenCanvas;
+    private bool isGameOver;
 
     private RectInt Bounds {
         get
@@ -130,7 +131,7 @@ public class Board : MonoBehaviour
         GameObject lineTextContainer = GameObject.Find("Line");
         TMP_Text lineText = lineTextContainer.GetComponent<TMP_Text>();
 
-        scoreCalculator = new ScoreCalculator(levelText, scoreText, lineText);
+        scoreCalculator = new ScoreCalculator(levelText, scoreText, lineText, numberOfPlayers);
 
         if (numberOfPlayers == 1)
         {
@@ -217,7 +218,7 @@ public class Board : MonoBehaviour
         // Pause Menu
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (pauseMenu != null)
+            if (!isGameOver)
             {
                 if (pauseMenu.activeSelf)
                 {
@@ -228,10 +229,6 @@ public class Board : MonoBehaviour
                     pauseMenu.SetActive(true);
                     isGamePaused = true;
                 }
-            }
-            else
-            {
-                Debug.Log("pauseMenu == null");
             }
         }
         // End Pause Menu
@@ -513,6 +510,13 @@ public class Board : MonoBehaviour
     void GameOver()
     {
         isGamePaused = true;
+        isGameOver = true;
         gameOverMenu.SetActive(true);
+    }
+
+    public void ScoreScreen()
+    {
+        gameOverMenu.SetActive(false);
+        scoreScreenCanvas.SetActive(true);
     }
 }
