@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
@@ -37,8 +38,10 @@ public class Board : MonoBehaviour
     private bool goingDown;
 
     private GameObject gameOverMenu;
-    private GameObject scoreScreenCanvas;
     private bool isGameOver;
+
+    private GameObject scoreScreenCanvas;
+    private GameObject saveCanvas;
 
     private RectInt Bounds {
         get
@@ -208,6 +211,12 @@ public class Board : MonoBehaviour
         if (scoreScreenCanvas.activeSelf)
         {
             scoreScreenCanvas.SetActive(false);
+        }
+
+        saveCanvas = GameObject.Find("SaveCanvas");
+        if (saveCanvas.activeSelf)
+        {
+            saveCanvas.SetActive(false);
         }
 
         gameBeginning = Time.time;
@@ -556,6 +565,35 @@ public class Board : MonoBehaviour
 
         TMP_Text totalLinesText = GameObject.Find("TotalLines").GetComponent<TMP_Text>();
         totalLinesText.text = scoreCalculator.GetLines().ToString();
+    }
+
+    public void SaveScreen()
+    {
+        scoreScreenCanvas.SetActive(false);
+        saveCanvas.SetActive(true);
+
+        GameObject playerOneNameInputField = GameObject.Find("PlayerOneNameInputField");
+        GameObject playerTwoNameInputField = GameObject.Find("PlayerTwoNameInputField");
+        GameObject playerThreeNameInputField = GameObject.Find("PlayerThreeNameInputField");
+        GameObject playerFourNameInputField = GameObject.Find("PlayerFourNameInputField");
+
+        if (numberOfPlayers == 1)
+        {
+            GameObject.Find("PlayerTwoLabel").SetActive(false);
+            playerTwoNameInputField.SetActive(false);
+        }
+
+        if (numberOfPlayers <= 2)
+        {
+            GameObject.Find("PlayerThreeLabel").SetActive(false);
+            playerThreeNameInputField.SetActive(false);
+        }
+
+        if (numberOfPlayers <= 3)
+        {
+            GameObject.Find("PlayerFourLabel").SetActive(false);
+            playerFourNameInputField.SetActive(false);
+        }
     }
 
     public void GoToMainMenu()
