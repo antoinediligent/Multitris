@@ -67,6 +67,16 @@ namespace Game
             levelText.text = level.ToString();
         }
 
+        public int GetScore()
+        {
+            return score;
+        }
+
+        public int GetLines()
+        {
+            return lines;
+        }
+
         public void AddPiece(int playerNumber)
         {
             playersStats[playerNumber].pieces += 1;

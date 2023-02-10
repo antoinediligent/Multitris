@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game;
-using Menu;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Board : MonoBehaviour
 {
@@ -103,7 +103,7 @@ public class Board : MonoBehaviour
 
     void Start()
     {
-        numberOfPlayers = StaticClass.NumberOfPlayers;
+        numberOfPlayers = MenuStaticClass.NumberOfPlayers;
         if (numberOfPlayers == 0)
         {
             numberOfPlayers = 1;
@@ -518,5 +518,48 @@ public class Board : MonoBehaviour
     {
         gameOverMenu.SetActive(false);
         scoreScreenCanvas.SetActive(true);
+
+        TMP_Text playerOnePiecesNumberText = GameObject.Find("PlayerOnePiecesNumber").GetComponent<TMP_Text>();
+        TMP_Text playerOneLinesNumberText = GameObject.Find("PlayerOneLinesNumber").GetComponent<TMP_Text>();
+        playerOnePiecesNumberText.text = scoreCalculator.GetPlayerStats(1).pieces.ToString();
+        playerOneLinesNumberText.text = scoreCalculator.GetPlayerStats(1).lines.ToString();
+
+        if (numberOfPlayers >= 2)
+        {
+            TMP_Text playerTwoPiecesNumberText = GameObject.Find("PlayerTwoPiecesNumber").GetComponent<TMP_Text>();
+            TMP_Text playerTwoLinesNumberText = GameObject.Find("PlayerTwoLinesNumber").GetComponent<TMP_Text>();
+            playerTwoPiecesNumberText.text = scoreCalculator.GetPlayerStats(2).pieces.ToString();
+            playerTwoLinesNumberText.text = scoreCalculator.GetPlayerStats(2).lines.ToString();
+        }
+
+        if (numberOfPlayers >= 3)
+        {
+            TMP_Text playerThreePiecesNumberText = GameObject.Find("PlayerThreePiecesNumber").GetComponent<TMP_Text>();
+            TMP_Text playerThreeLinesNumberText = GameObject.Find("PlayerThreeLinesNumber").GetComponent<TMP_Text>();
+            playerThreePiecesNumberText.text = scoreCalculator.GetPlayerStats(3).pieces.ToString();
+            playerThreeLinesNumberText.text = scoreCalculator.GetPlayerStats(3).lines.ToString();
+        }
+
+        if (numberOfPlayers == 4)
+        {
+            TMP_Text playerTwoPiecesNumberText = GameObject.Find("PlayerTwoPiecesNumber").GetComponent<TMP_Text>();
+            TMP_Text playerTwoLinesNumberText = GameObject.Find("PlayerTwoLinesNumber").GetComponent<TMP_Text>();
+            playerTwoPiecesNumberText.text = scoreCalculator.GetPlayerStats(2).pieces.ToString();
+            playerTwoLinesNumberText.text = scoreCalculator.GetPlayerStats(2).lines.ToString();
+        }
+
+        TMP_Text totalScoreText = GameObject.Find("TotalScore").GetComponent<TMP_Text>();
+        totalScoreText.text = scoreCalculator.GetScore().ToString();
+
+        TMP_Text levelText = GameObject.Find("Level").GetComponent<TMP_Text>();
+        levelText.text = scoreCalculator.GetLevel().ToString();
+
+        TMP_Text totalLinesText = GameObject.Find("TotalLines").GetComponent<TMP_Text>();
+        totalLinesText.text = scoreCalculator.GetLines().ToString();
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
