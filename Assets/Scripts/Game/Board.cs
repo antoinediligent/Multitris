@@ -565,8 +565,24 @@ public class Board : MonoBehaviour
         TMP_Text totalLinesText = GameObject.Find("TotalLines").GetComponent<TMP_Text>();
         totalLinesText.text = scoreCalculator.GetLines().ToString();
 
-        // TODO : display only if this game is in the highcores
-        GameObject highscoreWarning = GameObject.Find("HighscoreWarning");
+        TMP_Text highscoreWarningText = GameObject.Find("HighscoreWarning").GetComponent<TMP_Text>();
+        GameObject scoreScreenSaveButton = GameObject.Find("ScoreScreenSaveButton");
+
+
+        GameSummaryData gameSummaryData = new GameSummaryData(numberOfPlayers, scoreCalculator);
+        HighScoreBoardData highScoreBoardData = SaveSystem.LoadHighScoreBoard();
+
+        // Display only if this game is in the high scores
+        if (highScoreBoardData.IsGameScoreEligible(gameSummaryData))
+        {
+            highscoreWarningText.text = "Eligible au tableau des records";
+            scoreScreenSaveButton.SetActive(true);
+        }
+        else
+        {
+            highscoreWarningText.text = "Non eligible au tableau des records";
+            scoreScreenSaveButton.SetActive(false);
+        }
     }
 
     public void SaveScreen()

@@ -18,6 +18,44 @@ public class HighScoreBoardData
 
     public bool IsGameScoreEligible(GameSummaryData gameSummaryData)
     {
+        bool isGameScoreEligible;
+        if (gameSummaryData.numberOfPlayers == 1)
+        {
+            isGameScoreEligible = IsGameScoreEligible(onePlayerBoard, gameSummaryData);
+        }
+        else if (gameSummaryData.numberOfPlayers == 2)
+        {
+            isGameScoreEligible = IsGameScoreEligible(twoPlayerBoard, gameSummaryData);
+        }
+        else if (gameSummaryData.numberOfPlayers == 3)
+        {
+            isGameScoreEligible = IsGameScoreEligible(threePlayerBoard, gameSummaryData);
+        }
+        else
+        {
+            isGameScoreEligible = IsGameScoreEligible(fourPlayerBoard, gameSummaryData);
+        }
+
+        return isGameScoreEligible;
+    }
+
+    public bool IsGameScoreEligible(GameSummaryData[] boardToEdit, GameSummaryData gameSummaryData)
+    {
+        int i = 0;
+        while (true)
+        {
+            if (i == 10 || boardToEdit[i] == null || boardToEdit[i].score < gameSummaryData.score)
+            {
+                break;
+            }
+            i++;
+        }
+
+        if (i > 9)
+        {
+            return false;
+        }
+
         return true;
     }
 
