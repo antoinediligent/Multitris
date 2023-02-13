@@ -88,6 +88,7 @@ namespace Game
         }
     }
 
+    [System.Serializable]
     public class PlayerStats
     {
         public int pieces;

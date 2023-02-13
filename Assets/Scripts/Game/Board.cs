@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
@@ -565,6 +564,9 @@ public class Board : MonoBehaviour
 
         TMP_Text totalLinesText = GameObject.Find("TotalLines").GetComponent<TMP_Text>();
         totalLinesText.text = scoreCalculator.GetLines().ToString();
+
+        // TODO : display only if this game is in the highcores
+        GameObject highscoreWarning = GameObject.Find("HighscoreWarning");
     }
 
     public void SaveScreen()
@@ -594,6 +596,20 @@ public class Board : MonoBehaviour
             GameObject.Find("PlayerFourLabel").SetActive(false);
             playerFourNameInputField.SetActive(false);
         }
+    }
+
+    public void SaveGameSummary()
+    {
+        GameSummaryData gameSummaryData = new GameSummaryData(numberOfPlayers, scoreCalculator);
+        // gameSummaryData.setPlayerName(1, playerName);
+
+        HighScoreBoardData highScoreBoardData = SaveSystem.LoadHighScoreBoard();
+        if (highScoreBoardData == null)
+        {
+            highScoreBoardData = new HighScoreBoardData();
+        }
+        highScoreBoardData.AddScoreToBoard(gameSummaryData);
+        SaveSystem.SaveHighScoreBoard(highScoreBoardData);
     }
 
     public void GoToMainMenu()
