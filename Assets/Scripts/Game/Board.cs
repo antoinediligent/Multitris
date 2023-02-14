@@ -286,7 +286,7 @@ public class Board : MonoBehaviour
 
                 if (collisionResult == Piece.BOARD_COLLISION)
                 {
-                    CheckLines(players[0].GetPlayerNumber());
+                    CheckLines(players[0].GetPlayerNumber(), numberOfPlayers);
                     if (!IsGameOver())
                     {
                         players[0].NewPiece(this, tilemap);
@@ -311,7 +311,7 @@ public class Board : MonoBehaviour
 
             if (collisionResult == Piece.BOARD_COLLISION)
             {
-                CheckLines(players[0].GetPlayerNumber());
+                CheckLines(players[0].GetPlayerNumber(), numberOfPlayers);
                 if (!IsGameOver())
                 {
                     players[0].NewPiece(this, tilemap);
@@ -337,7 +337,7 @@ public class Board : MonoBehaviour
                 int collisionResult = players[i].piece.Down(tilemap);
                 if (collisionResult == Piece.BOARD_COLLISION)
                 {
-                    CheckLines(players[i].GetPlayerNumber());
+                    CheckLines(players[i].GetPlayerNumber(), numberOfPlayers);
                     if (!IsGameOver())
                     {
                         players[i].NewPiece(this, tilemap);
@@ -383,7 +383,7 @@ public class Board : MonoBehaviour
             int collisionResult = players[playerNumber].piece.Down(tilemap);
             if (collisionResult == Piece.BOARD_COLLISION)
             {
-                CheckLines(players[playerNumber].GetPlayerNumber());
+                CheckLines(players[playerNumber].GetPlayerNumber(), numberOfPlayers);
                 if (!IsGameOver())
                 {
                     players[playerNumber].NewPiece(this, tilemap);
@@ -433,7 +433,7 @@ public class Board : MonoBehaviour
      * trigPlayer = the player who triggered this verification,
      * needed to avoid a bug when hiding his piece
      */
-    public void CheckLines(int trigPlayer)
+    public void CheckLines(int trigPlayer, int numberOfPlayers)
     {
         ArrayList linesToClear = new ArrayList(4);
         for (int i = 0; i < tilemap.size.y - 1; i++)
@@ -447,7 +447,7 @@ public class Board : MonoBehaviour
                 }
             }
 
-            if (nbFilled == tilemap.size.x)
+            if (nbFilled == numberOfPlayers * 10)
             {
                 linesToClear.Add(i);
             }

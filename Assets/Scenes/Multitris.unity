@@ -1684,7 +1684,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &401111216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4463,7 +4463,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Eligible au tableau des scores
+  m_text: Eligible au tableau des records
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 34604d88d977cfe449bbf5a860d9b81f, type: 2}
   m_sharedMaterial: {fileID: -973072975455483343, guid: 34604d88d977cfe449bbf5a860d9b81f, type: 2}
@@ -6406,7 +6406,7 @@ GameObject:
   - component: {fileID: 1274157109}
   - component: {fileID: 1274157108}
   m_Layer: 5
-  m_Name: SaveButton
+  m_Name: ScoreScreenSaveButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8321,7 +8321,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1607473277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8733,7 +8733,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1742810771
 MonoBehaviour:
   m_ObjectHideFlags: 0
