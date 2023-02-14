@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
@@ -590,7 +591,6 @@ public class Board : MonoBehaviour
         scoreScreenCanvas.SetActive(false);
         saveCanvas.SetActive(true);
 
-        GameObject playerOneNameInputField = GameObject.Find("PlayerOneNameInputField");
         GameObject playerTwoNameInputField = GameObject.Find("PlayerTwoNameInputField");
         GameObject playerThreeNameInputField = GameObject.Find("PlayerThreeNameInputField");
         GameObject playerFourNameInputField = GameObject.Find("PlayerFourNameInputField");
@@ -614,16 +614,45 @@ public class Board : MonoBehaviour
         }
     }
 
+    /**
+     * When the player click on the Save button
+     */
     public void SaveGameSummary()
     {
         GameSummaryData gameSummaryData = new GameSummaryData(numberOfPlayers, scoreCalculator);
-        // gameSummaryData.setPlayerName(1, playerName);
+
+        TMP_Text playerOneNameTypedText = GameObject.Find("PlayerOneNameTypedText").GetComponent<TMP_Text>();
+
+        if (playerOneNameTypedText.text.Length <= 2)
+        {
+            Debug.Log(playerOneNameTypedText.text);
+            GameObject playerOneNameInputField = GameObject.Find("PlayerOneNameInputField");
+            Image playerOneNameInputFieldImage = playerOneNameInputField.GetComponent<Image>();
+            playerOneNameInputFieldImage.color = new Color(243, 32, 32);
+            return;
+        }
+
+        /*gameSummaryData.setPlayerName(1, playerOneNameInputFieldText.text);
+
+        if (numberOfPlayers >= 2)
+        {
+            TMP_Text playerTwoNameInputFieldText = GameObject.Find("PlayerTwoNameInputField").GetComponent<TMP_Text>();
+            gameSummaryData.setPlayerName(2, playerTwoNameInputFieldText.text);
+        }
+
+        if (numberOfPlayers >= 3)
+        {
+            TMP_Text playerThreeNameInputFieldText = GameObject.Find("PlayerThreeNameInputField").GetComponent<TMP_Text>();
+            gameSummaryData.setPlayerName(3, playerThreeNameInputFieldText.text);
+        }
+
+        if (numberOfPlayers == 4)
+        {
+            TMP_Text playerFourNameInputFieldText = GameObject.Find("PlayerFourNameInputField").GetComponent<TMP_Text>();
+            gameSummaryData.setPlayerName(4, playerFourNameInputFieldText.text);
+        }*/
 
         HighScoreBoardData highScoreBoardData = SaveSystem.LoadHighScoreBoard();
-        if (highScoreBoardData == null)
-        {
-            highScoreBoardData = new HighScoreBoardData();
-        }
         highScoreBoardData.AddScoreToBoard(gameSummaryData);
         SaveSystem.SaveHighScoreBoard(highScoreBoardData);
     }
