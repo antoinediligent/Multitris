@@ -194,26 +194,26 @@ public class Board : MonoBehaviour
             players.Add(player);
         }
 
-        pauseMenu = GameObject.Find("PauseMenuCanvas");
+        pauseMenu = FindInActiveObjectByName("PauseMenuCanvas");
         // PauseMenu must be enabled in the editor for the GameObject.Find to work
         if (pauseMenu.activeSelf)
         {
             pauseMenu.SetActive(false);
         }
 
-        gameOverMenu = GameObject.Find("GameOverMenuCanvas");
+        gameOverMenu = FindInActiveObjectByName("GameOverMenuCanvas");
         if (gameOverMenu.activeSelf)
         {
             gameOverMenu.SetActive(false);
         }
 
-        scoreScreenCanvas = GameObject.Find("ScoreScreenCanvas");
+        scoreScreenCanvas = FindInActiveObjectByName("ScoreScreenCanvas");
         if (scoreScreenCanvas.activeSelf)
         {
             scoreScreenCanvas.SetActive(false);
         }
 
-        saveCanvas = GameObject.Find("SaveCanvas");
+        saveCanvas = FindInActiveObjectByName("SaveCanvas");
         if (saveCanvas.activeSelf)
         {
             saveCanvas.SetActive(false);
@@ -660,5 +660,24 @@ public class Board : MonoBehaviour
     public void GoToMainMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    /**
+     * Needed to find inactive objects
+     */
+    GameObject FindInActiveObjectByName(string searchedName)
+    {
+        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
+        for (int i = 0; i < objs.Length; i++)
+        {
+            if (objs[i].hideFlags == HideFlags.None)
+            {
+                if (objs[i].name == searchedName)
+                {
+                    return objs[i].gameObject;
+                }
+            }
+        }
+        return null;
     }
 }
