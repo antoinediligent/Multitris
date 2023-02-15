@@ -29,8 +29,7 @@ public static class SaveSystem
             return data;
         }
 
-        Debug.LogError("Save file not found in " + path);
-        return null;
+        return new HighScoreBoardData();
     }
 
     private static string getFilePath()

@@ -1,4 +1,3 @@
-using Game;
 
 [System.Serializable]
 public class HighScoreBoardData
@@ -14,6 +13,26 @@ public class HighScoreBoardData
         twoPlayerBoard = new GameSummaryData[10];
         threePlayerBoard = new GameSummaryData[10];
         fourPlayerBoard = new GameSummaryData[10];
+    }
+
+    public bool IsGameScoreEligible(GameSummaryData[] boardToEdit, GameSummaryData gameSummaryData)
+    {
+        int i = 0;
+        while (true)
+        {
+            if (i == 10 || boardToEdit[i] == null || boardToEdit[i].score < gameSummaryData.score)
+            {
+                break;
+            }
+            i++;
+        }
+
+        if (i > 9)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public bool IsGameScoreEligible(GameSummaryData gameSummaryData)
@@ -37,26 +56,6 @@ public class HighScoreBoardData
         }
 
         return isGameScoreEligible;
-    }
-
-    public bool IsGameScoreEligible(GameSummaryData[] boardToEdit, GameSummaryData gameSummaryData)
-    {
-        int i = 0;
-        while (true)
-        {
-            if (i == 10 || boardToEdit[i] == null || boardToEdit[i].score < gameSummaryData.score)
-            {
-                break;
-            }
-            i++;
-        }
-
-        if (i > 9)
-        {
-            return false;
-        }
-
-        return true;
     }
 
     public GameSummaryData[] AddScoreToBoard(GameSummaryData[] boardToEdit, GameSummaryData gameSummaryData)
@@ -111,5 +110,30 @@ public class HighScoreBoardData
         {
             fourPlayerBoard = AddScoreToBoard(fourPlayerBoard, gameSummaryData);
         }
+    }
+
+    public GameSummaryData[] GetHighScoreBoard(int numberOfPlayers)
+    {
+        if (numberOfPlayers == 1)
+        {
+            return onePlayerBoard;
+        }
+
+        if (numberOfPlayers == 2)
+        {
+            return twoPlayerBoard;
+        }
+
+        if (numberOfPlayers == 3)
+        {
+            return threePlayerBoard;
+        }
+
+        if (numberOfPlayers == 4)
+        {
+            return fourPlayerBoard;
+        }
+
+        return null;
     }
 }
