@@ -63,7 +63,7 @@ public class HighScoreBoardData
         int i = 0;
         while (true)
         {
-            if (boardToEdit[i] == null || boardToEdit[i].score < gameSummaryData.score)
+            if (i > 9 || boardToEdit[i] == null || boardToEdit[i].score < gameSummaryData.score)
             {
                 break;
             }

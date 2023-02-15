@@ -42,6 +42,7 @@ public class Board : MonoBehaviour
 
     private GameObject scoreScreenCanvas;
     private GameObject saveCanvas;
+    private GameObject inputErrorExplanation;
 
     private RectInt Bounds {
         get
@@ -212,6 +213,9 @@ public class Board : MonoBehaviour
         {
             scoreScreenCanvas.SetActive(false);
         }
+
+        inputErrorExplanation = GameObject.Find("InputErrorExplanation");
+        inputErrorExplanation.SetActive(false);
 
         saveCanvas = FindInActiveObjectByName("SaveCanvas");
         if (saveCanvas.activeSelf)
@@ -590,6 +594,7 @@ public class Board : MonoBehaviour
     {
         scoreScreenCanvas.SetActive(false);
         saveCanvas.SetActive(true);
+        inputErrorExplanation.SetActive(false);
 
         GameObject playerTwoNameInputField = GameObject.Find("PlayerTwoNameInputField");
         GameObject playerThreeNameInputField = GameObject.Find("PlayerThreeNameInputField");
@@ -622,39 +627,65 @@ public class Board : MonoBehaviour
         GameSummaryData gameSummaryData = new GameSummaryData(numberOfPlayers, scoreCalculator);
 
         TMP_Text playerOneNameTypedText = GameObject.Find("PlayerOneNameTypedText").GetComponent<TMP_Text>();
-
-        if (playerOneNameTypedText.text.Length <= 2)
+        // Use the number 4 here, because the input field always count character with +1
+        if (playerOneNameTypedText.text.Length < 4)
         {
-            Debug.Log(playerOneNameTypedText.text);
-            GameObject playerOneNameInputField = GameObject.Find("PlayerOneNameInputField");
-            Image playerOneNameInputFieldImage = playerOneNameInputField.GetComponent<Image>();
-            playerOneNameInputFieldImage.color = new Color(243, 32, 32);
+            inputErrorExplanation.SetActive(true);
             return;
         }
-
-        /*gameSummaryData.setPlayerName(1, playerOneNameInputFieldText.text);
+        else
+        {
+            gameSummaryData.playerNames[0] = playerOneNameTypedText.text;
+        }
 
         if (numberOfPlayers >= 2)
         {
-            TMP_Text playerTwoNameInputFieldText = GameObject.Find("PlayerTwoNameInputField").GetComponent<TMP_Text>();
-            gameSummaryData.setPlayerName(2, playerTwoNameInputFieldText.text);
+            TMP_Text playerTwoNameTypedText = GameObject.Find("PlayerTwoNameTypedText").GetComponent<TMP_Text>();
+            if (playerTwoNameTypedText.text.Length < 4)
+            {
+                inputErrorExplanation.SetActive(true);
+                return;
+            }
+            else
+            {
+                gameSummaryData.playerNames[1] = playerTwoNameTypedText.text;
+            }
         }
 
         if (numberOfPlayers >= 3)
         {
-            TMP_Text playerThreeNameInputFieldText = GameObject.Find("PlayerThreeNameInputField").GetComponent<TMP_Text>();
-            gameSummaryData.setPlayerName(3, playerThreeNameInputFieldText.text);
+            TMP_Text playerThreeNameTypedText = GameObject.Find("PlayerThreeNameTypedText").GetComponent<TMP_Text>();
+            if (playerThreeNameTypedText.text.Length < 4)
+            {
+                inputErrorExplanation.SetActive(true);
+                return;
+            }
+            else
+            {
+                gameSummaryData.playerNames[2] = playerThreeNameTypedText.text;
+            }
         }
 
-        if (numberOfPlayers == 4)
+        if (numberOfPlayers >= 4)
         {
-            TMP_Text playerFourNameInputFieldText = GameObject.Find("PlayerFourNameInputField").GetComponent<TMP_Text>();
-            gameSummaryData.setPlayerName(4, playerFourNameInputFieldText.text);
-        }*/
+            TMP_Text playerFourNameTypedText = GameObject.Find("PlayerFourNameTypedText").GetComponent<TMP_Text>();
+            if (playerFourNameTypedText.text.Length < 4)
+            {
+                inputErrorExplanation.SetActive(true);
+                return;
+            }
+            else
+            {
+                gameSummaryData.playerNames[3] = playerFourNameTypedText.text;
+            }
+        }
 
         HighScoreBoardData highScoreBoardData = SaveSystem.LoadHighScoreBoard();
         highScoreBoardData.AddScoreToBoard(gameSummaryData);
         SaveSystem.SaveHighScoreBoard(highScoreBoardData);
+
+        scoreScreenCanvas.SetActive(true);
+        saveCanvas.SetActive(false);
     }
 
     public void GoToMainMenu()

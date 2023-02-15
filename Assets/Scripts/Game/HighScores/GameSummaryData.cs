@@ -36,11 +36,6 @@ public class GameSummaryData
         playerNames = new string[4];
     }
 
-    public void SetPlayerName(int playerNumber, string playerName)
-    {
-        playerNames[playerNumber] = playerName;
-    }
-
     public string GetPlayerNamesForHighScoreBoard()
     {
         string playerNamesString = playerNames[0];
