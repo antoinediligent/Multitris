@@ -52,57 +52,39 @@ public class Board : MonoBehaviour
         }
     }
 
-    private void Awake()
+    public void PlayerMove(int playerIndex, Vector2 vector2)
     {
-        controls = new PlayerControls();
+        if (players.Count <= playerIndex)
+        {
+            return;
+        }
 
-        controls.Gameplay.MoveUp.performed += ctx => players[1].piece.Rotate(tilemap);
+        Player currentPlayer = players[playerIndex];
 
-        controls.Gameplay.MoveLeft.started += ctx => StartMoveLeft();
-        controls.Gameplay.MoveLeft.canceled += ctx => StopMove();
-
-        controls.Gameplay.MoveRight.started += ctx => StartMoveRight();
-        controls.Gameplay.MoveRight.canceled += ctx => StopMove();
-
-        controls.Gameplay.MoveDown.started += ctx => StartMoveDown();
-        controls.Gameplay.MoveDown.canceled += ctx => StopMove();
-    }
-
-    void StartMoveLeft()
-    {
-        players[1].movingDirection = Player.MOVING_LEFT;
-        players[1].piece.MoveLeft(tilemap);
-        players[1].lastDirInputTime = Time.time;
-    }
-
-    void StartMoveRight()
-    {
-        players[1].movingDirection = Player.MOVING_RIGHT;
-        players[1].piece.MoveRight(tilemap);
-        players[1].lastDirInputTime = Time.time;
-    }
-
-    void StartMoveDown()
-    {
-        players[1].movingDirection = Player.MOVING_DOWN;
-        players[1].piece.Down(tilemap);
-        players[1].lastDirInputTime = Time.time;
-    }
-
-    void StopMove()
-    {
-        players[1].movingDirection = Player.NOT_MOVING;
-        players[1].superMove = false;
-    }
-
-    private void OnEnable()
-    {
-        controls.Gameplay.Enable();
-    }
-
-    private void OnDisable()
-    {
-        controls.Gameplay.Disable();
+        if (currentPlayer.lastDirInputTime + 0.3f < Time.time) {
+            if (vector2.x >= 1)
+            {
+                currentPlayer.movingDirection = Player.MOVING_RIGHT;
+                currentPlayer.piece.MoveRight(tilemap);
+                currentPlayer.lastDirInputTime = Time.time;
+            }
+            else if (vector2.x <= -1)
+            {
+                currentPlayer.movingDirection = Player.MOVING_LEFT;
+                currentPlayer.piece.MoveLeft(tilemap);
+                currentPlayer.lastDirInputTime = Time.time;
+            }
+            else if (vector2.y <= -1)
+            {
+                currentPlayer.movingDirection = Player.MOVING_DOWN;
+                currentPlayer.piece.Down(tilemap);
+                currentPlayer.lastDirInputTime = Time.time;
+            }
+            else if (vector2.y >= 1)
+            {
+                currentPlayer.piece.Rotate(tilemap);
+            }
+        }
     }
 
     void Start()
@@ -214,8 +196,8 @@ public class Board : MonoBehaviour
             scoreScreenCanvas.SetActive(false);
         }
 
-        inputErrorExplanation = GameObject.Find("InputErrorExplanation");
-        inputErrorExplanation.SetActive(false);
+        // inputErrorExplanation = GameObject.Find("InputErrorExplanation");
+        // inputErrorExplanation.SetActive(false);
 
         saveCanvas = FindInActiveObjectByName("SaveCanvas");
         if (saveCanvas.activeSelf)
@@ -247,7 +229,7 @@ public class Board : MonoBehaviour
         // End Pause Menu
 
         // Gamepad controls
-        if (!isGamePaused && numberOfPlayers > 1 && players[1].movingDirection != Player.NOT_MOVING)
+        /*if (!isGamePaused && numberOfPlayers > 1 && players[1].movingDirection != Player.NOT_MOVING)
         {
             if (Time.time > players[1].lastDirInputTime + 0.2f)
             {
@@ -260,10 +242,10 @@ public class Board : MonoBehaviour
                 MovePlayer(1);
                 players[1].lastDirInputTime = Time.time;
             }
-        }
+        }*/
         // End Gamepad controls
 
-        if (!isGamePaused && Time.time > lastHInput + 0.2f)
+        /*if (!isGamePaused && Time.time > lastHInput + 0.2f)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
@@ -327,7 +309,7 @@ public class Board : MonoBehaviour
                     GameOver();
                 }
             }
-        }
+        }*/
 
         if (!isGamePaused && Time.time > lastDownUpdate + (1.0f - scoreCalculator.GetLevel() * 0.05))
         {
