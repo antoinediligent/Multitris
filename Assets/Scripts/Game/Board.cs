@@ -19,22 +19,14 @@ public class Board : MonoBehaviour
 
     private Tilemap tilemap;
 
-    // Game push the piece down
-    private float lastDownUpdate;
-
     private GameObject pauseMenu;
     private bool isGamePaused = false;
 
+    // Game push the piece down
+    private float lastDownUpdate;
+
     private ScoreCalculator scoreCalculator;
     private float gameBeginning;
-
-    private PlayerControls controls;
-
-    // TODO : player 1 keyboard stuff
-    private float lastHInput;
-    private float lastVInput;
-
-    private bool goingDown;
 
     private GameObject gameOverMenu;
     private bool isGameOver;
@@ -244,8 +236,8 @@ public class Board : MonoBehaviour
             scoreScreenCanvas.SetActive(false);
         }
 
-        // inputErrorExplanation = GameObject.Find("InputErrorExplanation");
-        // inputErrorExplanation.SetActive(false);
+        inputErrorExplanation = FindInActiveObjectByName("InputErrorExplanation");
+        inputErrorExplanation.SetActive(false);
 
         saveCanvas = FindInActiveObjectByName("SaveCanvas");
         if (saveCanvas.activeSelf)
