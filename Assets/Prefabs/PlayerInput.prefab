@@ -74,6 +74,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 2dbd6069-77fc-4fd0-9a29-b1408c3a8476
     m_ActionName: Gameplay/New action[/SwitchProControllerHID/dpad,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8798784795704206772}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnInteraction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ccff6ad9-6d5e-439d-be82-188db556564f
+    m_ActionName: Gameplay/Hold[/SwitchProControllerHID/dpad]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay

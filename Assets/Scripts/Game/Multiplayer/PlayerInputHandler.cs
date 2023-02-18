@@ -19,4 +19,9 @@ public class PlayerInputHandler : MonoBehaviour
     {
         board.PlayerMove(playerIndex, context.ReadValue<Vector2>());
     }
+
+    public void OnInteraction(InputAction.CallbackContext context)
+    {
+        board.PlayerSlowTap(playerIndex, context.phase.ToString(), context.control.name);
+    }
 }

@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
@@ -54,35 +53,84 @@ public class Board : MonoBehaviour
 
     public void PlayerMove(int playerIndex, Vector2 vector2)
     {
+        // Protection if more gamepads than player are plugged
         if (players.Count <= playerIndex)
         {
             return;
         }
 
         Player currentPlayer = players[playerIndex];
-
-        if (currentPlayer.lastDirInputTime + 0.3f < Time.time) {
+        if (currentPlayer.lastDirInputTime + 0.1f < Time.time)
+        {
             if (vector2.x >= 1)
             {
-                currentPlayer.movingDirection = Player.MOVING_RIGHT;
                 currentPlayer.piece.MoveRight(tilemap);
                 currentPlayer.lastDirInputTime = Time.time;
             }
             else if (vector2.x <= -1)
             {
-                currentPlayer.movingDirection = Player.MOVING_LEFT;
                 currentPlayer.piece.MoveLeft(tilemap);
-                currentPlayer.lastDirInputTime = Time.time;
-            }
-            else if (vector2.y <= -1)
-            {
-                currentPlayer.movingDirection = Player.MOVING_DOWN;
-                currentPlayer.piece.Down(tilemap);
                 currentPlayer.lastDirInputTime = Time.time;
             }
             else if (vector2.y >= 1)
             {
                 currentPlayer.piece.Rotate(tilemap);
+                currentPlayer.lastDirInputTime = Time.time;
+            }
+            else if (vector2.y <= -1)
+            {
+                currentPlayer.piece.Down(tilemap);
+                currentPlayer.lastDirInputTime = Time.time;
+            }
+        }
+    }
+
+    public void PlayerSlowTap(int playerIndex, string phase, string controlName)
+    {
+        // Protection if more gamepads than player are plugged
+        if (players.Count <= playerIndex)
+        {
+            return;
+        }
+
+        Player currentPlayer = players[playerIndex];
+        if (controlName.Contains("right"))
+        {
+            if (phase.Equals("Started"))
+            {
+                currentPlayer.movingDirection = Player.MOVING_RIGHT;
+                currentPlayer.lastDirInputTime = Time.time;
+            }
+            else
+            {
+                currentPlayer.movingDirection = Player.NOT_MOVING;
+                currentPlayer.lastDirInputTime = Time.time;
+            }
+        }
+        else if (controlName.Contains("left"))
+        {
+            if (phase.Equals("Started"))
+            {
+                currentPlayer.movingDirection = Player.MOVING_LEFT;
+                currentPlayer.lastDirInputTime = Time.time;
+            }
+            else
+            {
+                currentPlayer.movingDirection = Player.NOT_MOVING;
+                currentPlayer.lastDirInputTime = Time.time;
+            }
+        }
+        else if (controlName.Contains("down"))
+        {
+            if (phase.Equals("Started"))
+            {
+                currentPlayer.movingDirection = Player.MOVING_DOWN;
+                currentPlayer.lastDirInputTime = Time.time;
+            }
+            else
+            {
+                currentPlayer.movingDirection = Player.NOT_MOVING;
+                currentPlayer.lastDirInputTime = Time.time;
             }
         }
     }
@@ -228,88 +276,17 @@ public class Board : MonoBehaviour
         }
         // End Pause Menu
 
-        // Gamepad controls
-        /*if (!isGamePaused && numberOfPlayers > 1 && players[1].movingDirection != Player.NOT_MOVING)
+        for (int i = 0; i < numberOfPlayers; i++)
         {
-            if (Time.time > players[1].lastDirInputTime + 0.2f)
+            if (!isGamePaused && players[i].movingDirection != Player.NOT_MOVING)
             {
-                MovePlayer(1);
-                players[1].lastDirInputTime = Time.time;
-                players[1].superMove = true;
-            }
-            else if (players[1].superMove && Time.time > players[1].lastDirInputTime + 0.03f)
-            {
-                MovePlayer(1);
-                players[1].lastDirInputTime = Time.time;
-            }
-        }*/
-        // End Gamepad controls
-
-        /*if (!isGamePaused && Time.time > lastHInput + 0.2f)
-        {
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                players[0].piece.MoveLeft(tilemap);
-                lastHInput = Time.time;
-            }
-            else if (Input.GetKey(KeyCode.RightArrow))
-            {
-                players[0].piece.MoveRight(tilemap);
-                lastHInput = Time.time;
-            }
-        }
-
-        if (!isGamePaused && Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            players[0].piece.Rotate(tilemap);
-        }
-
-        if (!isGamePaused && goingDown && lastVInput + 0.03f < Time.time)
-        {
-            if (Input.GetKey(KeyCode.DownArrow))
-            {
-                lastVInput = Time.time;
-                int collisionResult = players[0].piece.Down(tilemap);
-
-                if (collisionResult == Piece.BOARD_COLLISION)
+                if (Time.time > players[i].lastDirInputTime + 0.05f)
                 {
-                    CheckLines(players[0].GetPlayerNumber(), numberOfPlayers);
-                    if (!IsGameOver())
-                    {
-                        players[0].NewPiece(this, tilemap);
-                        goingDown = false;
-                    }
-                    else
-                    {
-                        GameOver();
-                    }
+                    MovePlayer(i);
+                    players[i].lastDirInputTime = Time.time;
                 }
             }
         }
-        else if (!isGamePaused && lastVInput + 0.2f < Time.time)
-        {
-            int collisionResult = 0;
-            if (Input.GetKey(KeyCode.DownArrow))
-            {
-                lastVInput = Time.time;
-                collisionResult = players[0].piece.Down(tilemap);
-                goingDown = true;
-            }
-
-            if (collisionResult == Piece.BOARD_COLLISION)
-            {
-                CheckLines(players[0].GetPlayerNumber(), numberOfPlayers);
-                if (!IsGameOver())
-                {
-                    players[0].NewPiece(this, tilemap);
-                    goingDown = false;
-                }
-                else
-                {
-                    GameOver();
-                }
-            }
-        }*/
 
         if (!isGamePaused && Time.time > lastDownUpdate + (1.0f - scoreCalculator.GetLevel() * 0.05))
         {
