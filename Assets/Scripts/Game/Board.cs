@@ -88,7 +88,7 @@ public class Board : MonoBehaviour
         Player currentPlayer = players[playerIndex];
         if (controlName.Contains("right"))
         {
-            if (phase.Equals("Started"))
+            if (phase.Equals("Performed"))
             {
                 currentPlayer.movingDirection = Player.MOVING_RIGHT;
                 currentPlayer.lastDirInputTime = Time.time;
@@ -101,7 +101,7 @@ public class Board : MonoBehaviour
         }
         else if (controlName.Contains("left"))
         {
-            if (phase.Equals("Started"))
+            if (phase.Equals("Performed"))
             {
                 currentPlayer.movingDirection = Player.MOVING_LEFT;
                 currentPlayer.lastDirInputTime = Time.time;
@@ -114,7 +114,7 @@ public class Board : MonoBehaviour
         }
         else if (controlName.Contains("down"))
         {
-            if (phase.Equals("Started"))
+            if (phase.Equals("Performed"))
             {
                 currentPlayer.movingDirection = Player.MOVING_DOWN;
                 currentPlayer.lastDirInputTime = Time.time;
