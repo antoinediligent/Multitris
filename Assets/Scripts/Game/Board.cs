@@ -637,6 +637,14 @@ public class Board : MonoBehaviour
 
         scoreScreenCanvas.SetActive(true);
         saveCanvas.SetActive(false);
+
+        // Hide HighscoreWarning
+        GameObject highscoreWarningText = FindInActiveObjectByName("HighscoreWarning");
+        highscoreWarningText.SetActive(false);
+
+        // ScoreScreenSaveButton
+        GameObject scoreScreenSaveButton = FindInActiveObjectByName("ScoreScreenSaveButton");
+        scoreScreenSaveButton.SetActive(false);
     }
 
     public void GoToMainMenu()
